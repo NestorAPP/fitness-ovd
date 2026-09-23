@@ -1,8 +1,5 @@
 package ru.ovd.fitness.feature.fitness
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -15,33 +12,10 @@ fun FitnessNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = "fitness_input",
+        startDestination = "fitness_input"
 
-        // Переходы «вглубь»: новый экран въезжает справа
-        enterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { it },
-                animationSpec = tween(300)
-            )
-        },
-        exitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { -it / 4 },
-                animationSpec = tween(300)
-            )
-        },
-        popEnterTransition = {
-            slideInHorizontally(
-                initialOffsetX = { -it / 4 },
-                animationSpec = tween(300)
-            )
-        },
-        popExitTransition = {
-            slideOutHorizontally(
-                targetOffsetX = { it },
-                animationSpec = tween(300)
-            )
-        }
+        // ─── Анимации переходов УБРАНЫ ───
+        // Экраны переключаются мгновенно, без наложений.
     ) {
         composable("fitness_input") {
             InputScreen(navController = navController)
