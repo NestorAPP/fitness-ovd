@@ -1,7 +1,5 @@
 package ru.ovd.fitness.feature.home
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
@@ -98,11 +96,11 @@ fun HomeScreen() {
             startDestination = "tab_fitness",
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding),
-            enterTransition    = { fadeIn() },
-            exitTransition     = { fadeOut() },
-            popEnterTransition = { fadeIn() },
-            popExitTransition  = { fadeOut() }
+                .padding(innerPadding)
+
+            // ─── Между вкладками таб-бара — БЕЗ анимаций ───
+            // Это устраняет наложение старого экрана на новый.
+            // Переключение мгновенное, как в Telegram.
         ) {
             composable("tab_fitness")  { FitnessNavHost() }
             composable("tab_shooting") { ShootingScreen() }
