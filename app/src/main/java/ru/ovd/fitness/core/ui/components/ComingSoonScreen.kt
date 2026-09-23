@@ -3,6 +3,7 @@ package ru.ovd.fitness.core.ui.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Construction
 import androidx.compose.material3.Icon
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.TextSecondary
@@ -38,7 +40,6 @@ fun ComingSoonScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // ─── Иконка в синем круге ───
         Box(
             modifier = Modifier
                 .size(120.dp)
@@ -56,7 +57,6 @@ fun ComingSoonScreen(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // ─── Заголовок ───
         Text(
             text = title,
             style = MaterialTheme.typography.headlineSmall,
@@ -67,12 +67,11 @@ fun ComingSoonScreen(
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // ─── Полоска триколора ───
         Row(
             modifier = Modifier
                 .width(80.dp)
                 .height(4.dp)
-                .clip(androidx.compose.foundation.shape.RoundedCornerShape(2.dp))
+                .clip(RoundedCornerShape(2.dp))
         ) {
             Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
             Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
@@ -81,7 +80,6 @@ fun ComingSoonScreen(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        // ─── Описание ───
         Text(
             text = subtitle,
             style = MaterialTheme.typography.bodyLarge,
