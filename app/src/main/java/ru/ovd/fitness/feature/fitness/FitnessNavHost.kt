@@ -13,9 +13,7 @@ fun FitnessNavHost(
     NavHost(
         navController = navController,
         startDestination = "fitness_input"
-
-        // ─── Анимации переходов УБРАНЫ ───
-        // Экраны переключаются мгновенно, без наложений.
+        // Анимации переходов убраны — переключение мгновенное.
     ) {
         composable("fitness_input") {
             InputScreen(navController = navController)
