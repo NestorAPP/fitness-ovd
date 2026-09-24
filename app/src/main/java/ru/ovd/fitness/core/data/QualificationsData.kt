@@ -4,29 +4,16 @@ import ru.ovd.fitness.core.data.entity.QualificationScore
 
 /**
  * Минимальные баллы для присвоения квалификационных званий.
- *
  * Источник: приказ МВД № 44, пункт 365.3.2.
  *
- * Звания по порядку:
- *   1 = Специалист третьего класса
- *   2 = Специалист второго класса
- *   3 = Специалист первого класса
- *   4 = Мастер
- *
- * Уровни: base (базовый), enhanced (усиленный), special (специальный).
- * Пол: male / female.
- *
- * Если у женщины 8-й группы нет записи — значит, звание не присваивается
- * (прочерк в приказе).
+ * qualificationOrder: 1 = Специалист 3 класса, 2 = Специалист 2 класса,
+ *                     3 = Специалист 1 класса, 4 = Мастер.
  */
 val qualificationsData: List<QualificationScore> = listOf(
 
-    // ═══════════════════════════════════════════════════════════
-    //   БАЗОВЫЙ УРОВЕНЬ
-    // ═══════════════════════════════════════════════════════════
+    // ═══════════ БАЗОВЫЙ УРОВЕНЬ ═══════════
 
-    // ─── Специалист третьего класса (порядок 1) ───
-    // Мужчины
+    // Специалист третьего класса — мужчины
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "base", groupNumber = 1, minPoints = 57),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "base", groupNumber = 2, minPoints = 52),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "base", groupNumber = 3, minPoints = 47),
@@ -35,7 +22,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "base", groupNumber = 6, minPoints = 32),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "base", groupNumber = 7, minPoints = 27),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "base", groupNumber = 8, minPoints = 22),
-    // Женщины
+    // Специалист третьего класса — женщины
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "base", groupNumber = 1, minPoints = 54),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "base", groupNumber = 2, minPoints = 49),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "base", groupNumber = 3, minPoints = 39),
@@ -44,8 +31,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "base", groupNumber = 6, minPoints = 17),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "base", groupNumber = 7, minPoints = 15),
 
-    // ─── Специалист второго класса (порядок 2) ───
-    // Мужчины
+    // Специалист второго класса — мужчины
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "base", groupNumber = 1, minPoints = 59),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "base", groupNumber = 2, minPoints = 54),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "base", groupNumber = 3, minPoints = 49),
@@ -54,7 +40,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "base", groupNumber = 6, minPoints = 34),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "base", groupNumber = 7, minPoints = 29),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "base", groupNumber = 8, minPoints = 24),
-    // Женщины
+    // Специалист второго класса — женщины
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "base", groupNumber = 1, minPoints = 58),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "base", groupNumber = 2, minPoints = 53),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "base", groupNumber = 3, minPoints = 43),
@@ -63,8 +49,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "base", groupNumber = 6, minPoints = 19),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "base", groupNumber = 7, minPoints = 17),
 
-    // ─── Специалист первого класса (порядок 3) ───
-    // Мужчины
+    // Специалист первого класса — мужчины
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "base", groupNumber = 1, minPoints = 62),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "base", groupNumber = 2, minPoints = 57),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "base", groupNumber = 3, minPoints = 52),
@@ -73,7 +58,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "base", groupNumber = 6, minPoints = 37),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "base", groupNumber = 7, minPoints = 32),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "base", groupNumber = 8, minPoints = 27),
-    // Женщины
+    // Специалист первого класса — женщины
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "base", groupNumber = 1, minPoints = 64),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "base", groupNumber = 2, minPoints = 59),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "base", groupNumber = 3, minPoints = 49),
@@ -82,8 +67,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "base", groupNumber = 6, minPoints = 22),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "base", groupNumber = 7, minPoints = 19),
 
-    // ─── Мастер (порядок 4) ───
-    // Мужчины
+    // Мастер — мужчины
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "base", groupNumber = 1, minPoints = 65),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "base", groupNumber = 2, minPoints = 60),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "base", groupNumber = 3, minPoints = 55),
@@ -92,7 +76,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "base", groupNumber = 6, minPoints = 40),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "base", groupNumber = 7, minPoints = 35),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "base", groupNumber = 8, minPoints = 30),
-    // Женщины
+    // Мастер — женщины
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "base", groupNumber = 1, minPoints = 70),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "base", groupNumber = 2, minPoints = 65),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "base", groupNumber = 3, minPoints = 55),
@@ -101,11 +85,9 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "base", groupNumber = 6, minPoints = 25),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "base", groupNumber = 7, minPoints = 22),
 
-    // ═══════════════════════════════════════════════════════════
-    //   УСИЛЕННЫЙ УРОВЕНЬ
-    // ═══════════════════════════════════════════════════════════
+    // ═══════════ УСИЛЕННЫЙ УРОВЕНЬ ═══════════
 
-    // ─── Специалист третьего класса ───
+    // Специалист третьего класса — мужчины
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "enhanced", groupNumber = 1, minPoints = 119),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "enhanced", groupNumber = 2, minPoints = 109),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "enhanced", groupNumber = 3, minPoints = 99),
@@ -114,6 +96,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "enhanced", groupNumber = 6, minPoints = 69),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "enhanced", groupNumber = 7, minPoints = 59),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "enhanced", groupNumber = 8, minPoints = 49),
+    // Специалист третьего класса — женщины
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "enhanced", groupNumber = 1, minPoints = 104),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "enhanced", groupNumber = 2, minPoints = 94),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "enhanced", groupNumber = 3, minPoints = 84),
@@ -122,7 +105,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "enhanced", groupNumber = 6, minPoints = 44),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "enhanced", groupNumber = 7, minPoints = 40),
 
-    // ─── Специалист второго класса ───
+    // Специалист второго класса — мужчины
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "enhanced", groupNumber = 1, minPoints = 123),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "enhanced", groupNumber = 2, minPoints = 113),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "enhanced", groupNumber = 3, minPoints = 103),
@@ -131,6 +114,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "enhanced", groupNumber = 6, minPoints = 73),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "enhanced", groupNumber = 7, minPoints = 63),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "enhanced", groupNumber = 8, minPoints = 53),
+    // Специалист второго класса — женщины
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "enhanced", groupNumber = 1, minPoints = 108),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "enhanced", groupNumber = 2, minPoints = 98),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "enhanced", groupNumber = 3, minPoints = 88),
@@ -139,7 +123,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "enhanced", groupNumber = 6, minPoints = 48),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "enhanced", groupNumber = 7, minPoints = 44),
 
-    // ─── Специалист первого класса ───
+    // Специалист первого класса — мужчины
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "enhanced", groupNumber = 1, minPoints = 129),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "enhanced", groupNumber = 2, minPoints = 119),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "enhanced", groupNumber = 3, minPoints = 109),
@@ -148,6 +132,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "enhanced", groupNumber = 6, minPoints = 79),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "enhanced", groupNumber = 7, minPoints = 69),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "enhanced", groupNumber = 8, minPoints = 59),
+    // Специалист первого класса — женщины
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "enhanced", groupNumber = 1, minPoints = 114),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "enhanced", groupNumber = 2, minPoints = 104),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "enhanced", groupNumber = 3, minPoints = 94),
@@ -156,7 +141,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "enhanced", groupNumber = 6, minPoints = 54),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "enhanced", groupNumber = 7, minPoints = 48),
 
-    // ─── Мастер ───
+    // Мастер — мужчины
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "enhanced", groupNumber = 1, minPoints = 135),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "enhanced", groupNumber = 2, minPoints = 125),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "enhanced", groupNumber = 3, minPoints = 115),
@@ -165,6 +150,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "enhanced", groupNumber = 6, minPoints = 85),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "enhanced", groupNumber = 7, minPoints = 75),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "enhanced", groupNumber = 8, minPoints = 65),
+    // Мастер — женщины
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "enhanced", groupNumber = 1, minPoints = 120),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "enhanced", groupNumber = 2, minPoints = 110),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "enhanced", groupNumber = 3, minPoints = 100),
@@ -173,11 +159,9 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "enhanced", groupNumber = 6, minPoints = 60),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "enhanced", groupNumber = 7, minPoints = 54),
 
-    // ═══════════════════════════════════════════════════════════
-    //   СПЕЦИАЛЬНЫЙ УРОВЕНЬ
-    // ═══════════════════════════════════════════════════════════
+    // ═══════════ СПЕЦИАЛЬНЫЙ УРОВЕНЬ ═══════════
 
-    // ─── Специалист третьего класса ───
+    // Специалист третьего класса — мужчины
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "special", groupNumber = 1, minPoints = 185),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "special", groupNumber = 2, minPoints = 170),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "special", groupNumber = 3, minPoints = 155),
@@ -186,6 +170,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "special", groupNumber = 6, minPoints = 110),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "special", groupNumber = 7, minPoints = 95),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "male", level = "special", groupNumber = 8, minPoints = 80),
+    // Специалист третьего класса — женщины
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "special", groupNumber = 1, minPoints = 155),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "special", groupNumber = 2, minPoints = 145),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "special", groupNumber = 3, minPoints = 130),
@@ -194,7 +179,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "special", groupNumber = 6, minPoints = 65),
     QualificationScore(qualificationName = "Специалист третьего класса", qualificationOrder = 1, gender = "female", level = "special", groupNumber = 7, minPoints = 60),
 
-    // ─── Специалист второго класса ───
+    // Специалист второго класса — мужчины
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "special", groupNumber = 1, minPoints = 190),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "special", groupNumber = 2, minPoints = 175),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "special", groupNumber = 3, minPoints = 160),
@@ -203,6 +188,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "special", groupNumber = 6, minPoints = 115),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "special", groupNumber = 7, minPoints = 100),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "male", level = "special", groupNumber = 8, minPoints = 85),
+    // Специалист второго класса — женщины
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "special", groupNumber = 1, minPoints = 160),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "special", groupNumber = 2, minPoints = 150),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "special", groupNumber = 3, minPoints = 135),
@@ -211,7 +197,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "special", groupNumber = 6, minPoints = 70),
     QualificationScore(qualificationName = "Специалист второго класса", qualificationOrder = 2, gender = "female", level = "special", groupNumber = 7, minPoints = 65),
 
-    // ─── Специалист первого класса ───
+    // Специалист первого класса — мужчины
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "special", groupNumber = 1, minPoints = 195),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "special", groupNumber = 2, minPoints = 180),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "special", groupNumber = 3, minPoints = 165),
@@ -220,6 +206,7 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "special", groupNumber = 6, minPoints = 120),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "special", groupNumber = 7, minPoints = 105),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "male", level = "special", groupNumber = 8, minPoints = 90),
+    // Специалист первого класса — женщины
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "special", groupNumber = 1, minPoints = 165),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "special", groupNumber = 2, minPoints = 155),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "special", groupNumber = 3, minPoints = 140),
@@ -228,8 +215,21 @@ val qualificationsData: List<QualificationScore> = listOf(
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "special", groupNumber = 6, minPoints = 75),
     QualificationScore(qualificationName = "Специалист первого класса", qualificationOrder = 3, gender = "female", level = "special", groupNumber = 7, minPoints = 70),
 
-    // ─── Мастер ───
+    // Мастер — мужчины
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 1, minPoints = 200),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 2, minPoints = 185),
     QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 3, minPoints = 170),
-    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 4, minPoints = 155),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 5, minPoints = 140),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 6, minPoints = 125),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 7, minPoints = 110),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "male", level = "special", groupNumber = 8, minPoints = 95),
+    // Мастер — женщины
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 1, minPoints = 170),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 2, minPoints = 160),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 3, minPoints = 145),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 4, minPoints = 130),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 5, minPoints = 100),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 6, minPoints = 80),
+    QualificationScore(qualificationName = "Мастер", qualificationOrder = 4, gender = "female", level = "special", groupNumber = 7, minPoints = 75)
+)
