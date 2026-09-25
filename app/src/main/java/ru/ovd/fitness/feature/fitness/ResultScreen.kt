@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,8 +26,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
-import ru.ovd.fitness.core.ui.theme.OvdLightBlue
-import ru.ovd.fitness.core.ui.theme.StatusGreen
 import ru.ovd.fitness.core.ui.theme.SurfaceWhite
 import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
@@ -34,27 +33,19 @@ import ru.ovd.fitness.core.ui.theme.TriBlue
 import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
 
-/**
- * Экран результата.
- *
- * Показывает:
- * - Возрастную группу.
- * - Минимальный и рекомендуемый балл для сдачи итоговых занятий.
- * - Список квалификационных званий и нужные баллы для каждого.
- *
- * ВАЖНО: пока принимает тестовые данные (мужчина, 30, базовый).
- * На следующем шаге подключим передачу из InputScreen.
- */
 @Composable
 fun ResultScreen(
     navController: NavHostController,
+    gender: String,
+    age: Int,
+    level: String,
     viewModel: ResultViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    // ─── Тестовые данные (пока) ───
-    LaunchedEffect(Unit) {
-        viewModel.calculate(gender = "male", age = 30, level = "base")
+    // ─── Запуск расчёта с реальными данными ───
+    LaunchedEffect(gender, age, level) {
+        viewModel.calculate(gender = gender, age = age, level = level)
     }
 
     Column(
@@ -68,7 +59,6 @@ fun ResultScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ─── Заголовок ───
         Text(
             text = "Твои нормативы",
             style = MaterialTheme.typography.headlineSmall,
@@ -90,9 +80,18 @@ fun ResultScreen(
             Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
         }
 
+        Spacer(modifier = Modifier.height(20.dp))
+
+        // ─── Введённые данные (для проверки) ───
+        Text(
+            text = formatInput(gender, age, level),
+            color = TextSecondary,
+            fontSize = 14.sp,
+            textAlign = TextAlign.Center
+        )
+
         Spacer(modifier = Modifier.height(24.dp))
 
-        // ─── Загрузка / ошибка / результат ───
         when {
             state.isLoading -> {
                 CircularProgressIndicator(color = OvdDarkBlue)
@@ -114,7 +113,6 @@ fun ResultScreen(
             }
 
             else -> {
-                // ─── Возрастная группа ───
                 InfoCard(
                     title = "Возрастная группа",
                     value = "Группа ${state.ageGroupNumber} · ${state.ageGroupLabel}",
@@ -123,7 +121,6 @@ fun ResultScreen(
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // ─── Минимум для сдачи ───
                 ScoreCard(
                     label = "Минимум для сдачи",
                     value = state.minPoints.toString(),
@@ -133,7 +130,6 @@ fun ResultScreen(
 
                 Spacer(modifier = Modifier.height(24.dp))
 
-                // ─── Квалификационные звания ───
                 Text(
                     text = "Квалификационные звания",
                     style = MaterialTheme.typography.titleMedium,
@@ -145,10 +141,7 @@ fun ResultScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 state.qualifications.forEach { q ->
-                    QualificationRow(
-                        name = q.name,
-                        points = q.minPoints
-                    )
+                    QualificationRow(name = q.name, points = q.minPoints)
                     Spacer(modifier = Modifier.height(8.dp))
                 }
             }
@@ -156,7 +149,6 @@ fun ResultScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // ─── Кнопка «Назад» ───
         Button(
             onClick = { navController.popBackStack() },
             modifier = Modifier
@@ -180,16 +172,24 @@ fun ResultScreen(
     }
 }
 
-// ═══════════════════════════════════════════════════════
-//   ВСПОМОГАТЕЛЬНЫЕ КОМПОНЕНТЫ
-// ═══════════════════════════════════════════════════════
+// ─── Форматирование «введённых данных» ───
+private fun formatInput(gender: String, age: Int, level: String): String {
+    val g = when (gender) {
+        "male" -> "Мужской"
+        "female" -> "Женский"
+        else -> gender
+    }
+    val l = when (level) {
+        "base" -> "Базовый"
+        "enhanced" -> "Усиленный"
+        "special" -> "Специальный"
+        else -> level
+    }
+    return "$g · $age лет · $l"
+}
 
 @Composable
-private fun InfoCard(
-    title: String,
-    value: String,
-    valueColor: androidx.compose.ui.graphics.Color
-) {
+private fun InfoCard(title: String, value: String, valueColor: Color) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -197,24 +197,12 @@ private fun InfoCard(
             .background(SurfaceWhite)
             .padding(16.dp)
     ) {
-        Text(
-            text = title,
-            color = TextSecondary,
-            fontSize = 13.sp
-        )
+        Text(text = title, color = TextSecondary, fontSize = 13.sp)
         Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = value,
-            color = valueColor,
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp
-        )
+        Text(text = value, color = valueColor, fontWeight = FontWeight.Bold, fontSize = 18.sp)
     }
 }
 
-/**
- * Крупная карточка с главным баллом.
- */
 @Composable
 private fun ScoreCard(
     label: String,
@@ -257,14 +245,8 @@ private fun ScoreCard(
     }
 }
 
-/**
- * Строка квалификационного звания.
- */
 @Composable
-private fun QualificationRow(
-    name: String,
-    points: Int
-) {
+private fun QualificationRow(name: String, points: Int) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -287,10 +269,6 @@ private fun QualificationRow(
             fontSize = 20.sp
         )
         Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = "б.",
-            color = TextSecondary,
-            fontSize = 13.sp
-        )
+        Text(text = "б.", color = TextSecondary, fontSize = 13.sp)
     }
 }
