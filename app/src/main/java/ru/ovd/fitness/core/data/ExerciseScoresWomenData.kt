@@ -1,0 +1,125 @@
+package ru.ovd.fitness.core.data
+
+import ru.ovd.fitness.core.data.entity.ExerciseScore
+
+/**
+ * Баллы за упражнения для женщин (приказ МВД № 44, п. 343.2).
+ *
+ * ВАЖНО: файл вставляется по частям (1 из 4).
+ * В конце части 1 — запятая, список не закрывается.
+ *
+ * exerciseId соответствует orderNumber в ExercisesData:
+ *   1 = Сгибание и разгибание рук в упоре лёжа
+ *   2 = Наклоны вперёд из положения лёжа на спине
+ *   3 = Челночный бег 10×10
+ *   4 = Бег 1 км
+ *   5 = Бег 3 км
+ *   6 = Бег на лыжах 5 км
+ *   7 = Плавание 100 м
+ */
+val exerciseScoresWomenData: List<ExerciseScore> = listOf(
+
+    // ═══════════════════════════════════════════
+    //   УПРАЖНЕНИЕ 1: Сгибание и разгибание рук в упоре лёжа
+    // ═══════════════════════════════════════════
+    ExerciseScore(exerciseId = 1, gender = "female", points = 100, resultDisplay = "более 38", resultMinSec = 39, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 99, resultDisplay = "38", resultMinSec = 38, resultMaxSec = 38, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 98, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 97, resultDisplay = "37", resultMinSec = 37, resultMaxSec = 37, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 96, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 95, resultDisplay = "36", resultMinSec = 36, resultMaxSec = 36, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 94, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 93, resultDisplay = "35", resultMinSec = 35, resultMaxSec = 35, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 92, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 91, resultDisplay = "34", resultMinSec = 34, resultMaxSec = 34, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 90, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 89, resultDisplay = "33", resultMinSec = 33, resultMaxSec = 33, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 88, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 87, resultDisplay = "32", resultMinSec = 32, resultMaxSec = 32, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 86, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 85, resultDisplay = "31", resultMinSec = 31, resultMaxSec = 31, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 84, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 83, resultDisplay = "30", resultMinSec = 30, resultMaxSec = 30, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 82, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 81, resultDisplay = "29", resultMinSec = 29, resultMaxSec = 29, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 80, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 79, resultDisplay = "28", resultMinSec = 28, resultMaxSec = 28, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 78, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 77, resultDisplay = "27", resultMinSec = 27, resultMaxSec = 27, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 76, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 75, resultDisplay = "26", resultMinSec = 26, resultMaxSec = 26, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 74, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 73, resultDisplay = "25", resultMinSec = 25, resultMaxSec = 25, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 72, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 71, resultDisplay = "24", resultMinSec = 24, resultMaxSec = 24, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 70, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 69, resultDisplay = "23", resultMinSec = 23, resultMaxSec = 23, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 68, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 67, resultDisplay = "22", resultMinSec = 22, resultMaxSec = 22, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 66, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 65, resultDisplay = "21", resultMinSec = 21, resultMaxSec = 21, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 64, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 63, resultDisplay = "20", resultMinSec = 20, resultMaxSec = 20, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 62, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 61, resultDisplay = "19", resultMinSec = 19, resultMaxSec = 19, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 60, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 59, resultDisplay = "18", resultMinSec = 18, resultMaxSec = 18, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 58, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 57, resultDisplay = "17", resultMinSec = 17, resultMaxSec = 17, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 56, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 55, resultDisplay = "16", resultMinSec = 16, resultMaxSec = 16, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 54, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 53, resultDisplay = "15", resultMinSec = 15, resultMaxSec = 15, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 52, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 51, resultDisplay = "14", resultMinSec = 14, resultMaxSec = 14, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 50, resultDisplay = "13", resultMinSec = 13, resultMaxSec = 13, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 49, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 48, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 47, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 46, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 45, resultDisplay = "12", resultMinSec = 12, resultMaxSec = 12, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 44, resultDisplay = "11", resultMinSec = 11, resultMaxSec = 11, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 43, resultDisplay = "10", resultMinSec = 10, resultMaxSec = 10, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 42, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 41, resultDisplay = "9", resultMinSec = 9, resultMaxSec = 9, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 40, resultDisplay = "8", resultMinSec = 8, resultMaxSec = 8, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 39, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 38, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 37, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 36, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 35, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 34, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 33, resultDisplay = "7", resultMinSec = 7, resultMaxSec = 7, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 32, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 31, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 30, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 29, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 28, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 27, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 26, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 25, resultDisplay = "6", resultMinSec = 6, resultMaxSec = 6, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 24, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 23, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 22, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 21, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 20, resultDisplay = "5", resultMinSec = 5, resultMaxSec = 5, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 19, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 18, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 17, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 16, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 15, resultDisplay = "4", resultMinSec = 4, resultMaxSec = 4, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 14, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 13, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 12, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 11, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 10, resultDisplay = "3", resultMinSec = 3, resultMaxSec = 3, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 9, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 8, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 7, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 6, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 5, resultDisplay = "2", resultMinSec = 2, resultMaxSec = 2, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 4, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 3, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 2, resultDisplay = "—", resultMinSec = null, resultMaxSec = null, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 1, resultDisplay = "1", resultMinSec = 1, resultMaxSec = 1, resultUnit = "раз"),
+    ExerciseScore(exerciseId = 1, gender = "female", points = 0, resultDisplay = "0", resultMinSec = 0, resultMaxSec = 0, resultUnit = "раз"),
