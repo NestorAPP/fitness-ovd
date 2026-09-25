@@ -37,10 +37,6 @@ import ru.ovd.fitness.core.ui.theme.TriBlue
 
 /**
  * Колесо выбора возраста (18..70).
- *
- * - Крутится пальцем.
- * - В центре выделено выбранное значение.
- * - При прокрутке — лёгкая вибрация и щелчок.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -52,6 +48,14 @@ fun AgeWheel(
     modifier: Modifier = Modifier
 ) {
     val ages = remember { (minAge..maxAge).toList() }
+
+    // Высота одной строки
+    val itemHeight = 56.dp
+    // Видимая высота колеса (примерно 3 строки)
+    val wheelHeight = itemHeight * 3
+    // Отступ сверху и снизу, чтобы выбранный элемент был в центре
+    val verticalPadding = itemHeight
+
     val listState = rememberLazyListState(
         initialFirstVisibleItemIndex = (selectedAge - minAge).coerceAtLeast(0)
     )
@@ -59,11 +63,12 @@ fun AgeWheel(
 
     val context = LocalContext.current
 
+    // Отслеживаем, какой элемент сейчас в центре
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .distinctUntilChanged()
             .collect { index ->
-                val centerIndex = index + 1
+                val centerIndex = index
                 if (centerIndex in ages.indices) {
                     val newAge = ages[centerIndex]
                     if (newAge != selectedAge) {
@@ -76,14 +81,15 @@ fun AgeWheel(
 
     Box(
         modifier = modifier
-            .width(120.dp)
-            .height(180.dp),
+            .width(160.dp)
+            .height(wheelHeight),
         contentAlignment = Alignment.Center
     ) {
+        // ─── Голубая подсветка центральной строки ───
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
+                .height(itemHeight)
                 .clip(RoundedCornerShape(12.dp))
                 .background(TriBlue.copy(alpha = 0.08f))
         )
@@ -91,22 +97,21 @@ fun AgeWheel(
         LazyColumn(
             state = listState,
             flingBehavior = flingBehavior,
-            contentPadding = PaddingValues(vertical = 62.dp),
+            contentPadding = PaddingValues(vertical = verticalPadding),
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(ages.size) { i ->
-                val age = ages[i]
+            items(ages) { age ->
                 val isSelected = age == selectedAge
 
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp),
+                        .height(itemHeight),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = age.toString(),
-                        fontSize = if (isSelected) 32.sp else 22.sp,
+                        fontSize = if (isSelected) 30.sp else 22.sp,
                         fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
                         color = if (isSelected) OvdDarkBlue else TextSecondary
                     )
@@ -116,6 +121,9 @@ fun AgeWheel(
     }
 }
 
+/**
+ * Короткий щелчок + вибрация при прокрутке.
+ */
 private fun playTick(context: android.content.Context) {
     try {
         val toneGen = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 30)
@@ -123,9 +131,7 @@ private fun playTick(context: android.content.Context) {
         android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
             toneGen.release()
         }, 60)
-    } catch (_: Exception) {
-        // Игнор
-    }
+    } catch (_: Exception) {}
 
     try {
         val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -143,7 +149,5 @@ private fun playTick(context: android.content.Context) {
                 it.vibrate(15)
             }
         }
-    } catch (_: Exception) {
-        // Игнор
-    }
+    } catch (_: Exception) {}
 }
