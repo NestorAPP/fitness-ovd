@@ -8,43 +8,47 @@ import androidx.room.PrimaryKey
  *
  * Источник: приказ МВД № 44, пункт 343.
  *
- * Одна строка = один балл одного упражнения для одной возрастной группы.
+ * Одна строка = один балл одного упражнения для одного пола.
  *
- * Пример (мужчины, подтягивание):
+ * Связь с упражнением — через пару (gender, orderNumber):
+ *   - gender = "male" / "female"
+ *   - orderNumber = 1..9 (для мужчин), 1..7 (для женщин)
+ *
+ * Пример (мужчины, подтягивание, orderNumber = 1):
  *   points = 100, resultDisplay = "более 22"
  *   points = 99,  resultDisplay = "22"
  *   points = 98,  resultDisplay = "21"
  *   points = 97,  resultDisplay = "—" (прочерк)
  *
- * Для числовых сравнений (в калькуляторе) храним секунды:
- *   "10.31" (10 мин 31 сек) → resultMinSec = 631
- *   "10.31 — 10.34" → resultMinSec = 631, resultMaxSec = 634
- *   "22" → resultMinSec = 22, resultMaxSec = 22
- *
- * Если балл не даётся за результат (прочерк) — resultMinSec = null.
+ * Для числовых сравнений (в калькуляторе) храним значения в формате
+ * приказа как Double:
+ *   "10.31" (10 мин 31 сек) → resultMinSec = 10.31, resultMaxSec = null
+ *   "10.31 - 10.34"          → resultMinSec = 10.31, resultMaxSec = 10.34
+ *   "22"  (22 раза)          → resultMinSec = 22.0,  resultMaxSec = 22.0
+ *   "—"   (прочерк)          → resultMinSec = null,  resultMaxSec = null
  */
 @Entity(tableName = "exercise_scores")
 data class ExerciseScore(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
 
-    /** Ссылка на упражнение (Exercise.id) */
-    val exerciseId: Int,
-
     /** Пол: "male" / "female" */
     val gender: String,
+
+    /** Порядковый номер упражнения: 1..9 (муж), 1..7 (жен) */
+    val orderNumber: Int,
 
     /** Балл: 0..100 */
     val points: Int,
 
-    /** Текст для отображения: "более 22", "10.31 — 10.34", "—" */
+    /** Текст для отображения: "более 22", "10.31 - 10.34", "—" */
     val resultDisplay: String,
 
-    /** Минимальное значение в секундах (null — нет значения) */
-    val resultMinSec: Int?,
+    /** Минимальное значение (null — нет значения) */
+    val resultMinSec: Double?,
 
-    /** Максимальное значение в секундах (null — одиночное значение или нет) */
-    val resultMaxSec: Int?,
+    /** Максимальное значение (null — одиночное значение или нет) */
+    val resultMaxSec: Double?,
 
     /** Единица измерения: "раз", "секунд", "минут, секунд" */
     val resultUnit: String
