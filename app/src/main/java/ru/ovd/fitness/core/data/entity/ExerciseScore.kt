@@ -45,10 +45,10 @@ data class ExerciseScore(
     val resultDisplay: String,
 
     /** Минимальное значение (null — нет значения) */
-    val resultMinSec: Double?,
+    val resultMinSec: Number?,
 
     /** Максимальное значение (null — одиночное значение или нет) */
-    val resultMaxSec: Double?,
+    val resultMaxSec: Number?,
 
     /** Единица измерения: "раз", "секунд", "минут, секунд" */
     val resultUnit: String
