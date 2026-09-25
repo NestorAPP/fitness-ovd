@@ -1,7 +1,6 @@
 package ru.ovd.fitness.feature.fitness
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +30,6 @@ import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.OvdLightBlue
 import ru.ovd.fitness.core.ui.theme.SurfaceWhite
-import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
 import ru.ovd.fitness.core.ui.theme.TriRed
@@ -55,7 +53,6 @@ fun InputScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ─── Заголовок ───
         Text(
             text = "Физическая подготовка",
             style = MaterialTheme.typography.headlineSmall,
@@ -79,21 +76,14 @@ fun InputScreen(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // ─── Пол ───
         SectionTitle("Пол")
         Spacer(modifier = Modifier.height(12.dp))
-
-        GenderToggle(
-            gender = state.gender,
-            onGenderChange = { viewModel.setGender(it) }
-        )
+        GenderToggle(state.gender) { viewModel.setGender(it) }
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // ─── Возраст ───
         SectionTitle("Возраст")
         Spacer(modifier = Modifier.height(12.dp))
-
         AgeWheel(
             selectedAge = state.age,
             onAgeChange = { viewModel.setAge(it) }
@@ -101,39 +91,33 @@ fun InputScreen(
 
         Spacer(modifier = Modifier.height(28.dp))
 
-        // ─── Уровень подготовки ───
         SectionTitle("Уровень подготовки")
         Spacer(modifier = Modifier.height(12.dp))
 
-        LevelOption(
-            title = "Базовый",
-            description = "Для сотрудников, не являющихся сотрудниками полиции, и 4 группы предназначения",
-            selected = state.level == "base",
-            onClick = { viewModel.setLevel("base") }
-        )
+        LevelOption("Базовый",
+            "Для сотрудников, не являющихся сотрудниками полиции, и 4 группы предназначения",
+            state.level == "base"
+        ) { viewModel.setLevel("base") }
         Spacer(modifier = Modifier.height(10.dp))
 
-        LevelOption(
-            title = "Усиленный",
-            description = "Для сотрудников полиции (1–3 группы предназначения)",
-            selected = state.level == "enhanced",
-            onClick = { viewModel.setLevel("enhanced") }
-        )
+        LevelOption("Усиленный",
+            "Для сотрудников полиции (1–3 группы предназначения)",
+            state.level == "enhanced"
+        ) { viewModel.setLevel("enhanced") }
         Spacer(modifier = Modifier.height(10.dp))
 
-        LevelOption(
-            title = "Специальный",
-            description = "Для спецподразделений (СОБР, ОМОН и т.д.)",
-            selected = state.level == "special",
-            onClick = { viewModel.setLevel("special") }
-        )
+        LevelOption("Специальный",
+            "Для спецподразделений (СОБР, ОМОН и т.д.)",
+            state.level == "special"
+        ) { viewModel.setLevel("special") }
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // ─── Кнопка «Рассчитать» ───
         Button(
             onClick = {
-                navController.navigate("fitness_result")
+                navController.navigate(
+                    "fitness_result?gender=${state.gender}&age=${state.age}&level=${state.level}"
+                )
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -157,10 +141,6 @@ fun InputScreen(
     }
 }
 
-// ═══════════════════════════════════════════════════════
-//   ВСПОМОГАТЕЛЬНЫЕ КОМПОНЕНТЫ
-// ═══════════════════════════════════════════════════════
-
 @Composable
 private fun SectionTitle(text: String) {
     Text(
@@ -172,14 +152,8 @@ private fun SectionTitle(text: String) {
     )
 }
 
-/**
- * Тумблер пола: «Мужской» ⇄ «Женский».
- */
 @Composable
-private fun GenderToggle(
-    gender: String,
-    onGenderChange: (String) -> Unit
-) {
+private fun GenderToggle(gender: String, onGenderChange: (String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -188,18 +162,10 @@ private fun GenderToggle(
             .background(SurfaceWhite),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        GenderToggleSide(
-            text = "Мужской",
-            selected = gender == "male",
-            onClick = { onGenderChange("male") },
-            modifier = Modifier.weight(1f)
-        )
-        GenderToggleSide(
-            text = "Женский",
-            selected = gender == "female",
-            onClick = { onGenderChange("female") },
-            modifier = Modifier.weight(1f)
-        )
+        GenderToggleSide("Мужской", gender == "male",
+            Modifier.weight(1f)) { onGenderChange("male") }
+        GenderToggleSide("Женский", gender == "female",
+            Modifier.weight(1f)) { onGenderChange("female") }
     }
 }
 
@@ -207,18 +173,16 @@ private fun GenderToggle(
 private fun GenderToggleSide(
     text: String,
     selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     val bg by animateColorAsState(
-        targetValue = if (selected) OvdDarkBlue else Color.Transparent,
-        animationSpec = tween(250),
-        label = "genderBg"
+        if (selected) OvdDarkBlue else Color.Transparent,
+        tween(250), label = "genderBg"
     )
     val fg by animateColorAsState(
-        targetValue = if (selected) TriWhite else TextSecondary,
-        animationSpec = tween(250),
-        label = "genderFg"
+        if (selected) TriWhite else TextSecondary,
+        tween(250), label = "genderFg"
     )
 
     Box(
@@ -239,9 +203,6 @@ private fun GenderToggleSide(
     }
 }
 
-/**
- * Карточка одного уровня подготовки.
- */
 @Composable
 private fun LevelOption(
     title: String,
@@ -250,14 +211,8 @@ private fun LevelOption(
     onClick: () -> Unit
 ) {
     val bg by animateColorAsState(
-        targetValue = if (selected) OvdLightBlue else SurfaceWhite,
-        animationSpec = tween(250),
-        label = "levelBg"
-    )
-    val border by animateColorAsState(
-        targetValue = if (selected) OvdDarkBlue else Color.Transparent,
-        animationSpec = tween(250),
-        label = "levelBorder"
+        if (selected) OvdLightBlue else SurfaceWhite,
+        tween(250), label = "levelBg"
     )
 
     Row(
@@ -269,17 +224,12 @@ private fun LevelOption(
             .padding(16.dp),
         verticalAlignment = Alignment.Top
     ) {
-        // ─── Кружок выбора ───
         Box(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .size(20.dp)
                 .clip(CircleShape)
-                .background(if (selected) OvdDarkBlue else Color.Transparent)
-                .then(
-                    if (!selected) Modifier.background(TextSecondary.copy(alpha = 0.3f))
-                    else Modifier
-                ),
+                .background(if (selected) OvdDarkBlue else TextSecondary.copy(alpha = 0.3f)),
             contentAlignment = Alignment.Center
         ) {
             if (selected) {
