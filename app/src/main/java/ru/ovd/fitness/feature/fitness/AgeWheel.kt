@@ -6,23 +6,21 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -44,6 +42,7 @@ import ru.ovd.fitness.core.ui.theme.TriBlue
  * - В центре выделено выбранное значение.
  * - При прокрутке — лёгкая вибрация и щелчок.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AgeWheel(
     selectedAge: Int,
@@ -60,12 +59,10 @@ fun AgeWheel(
 
     val context = LocalContext.current
 
-    // ─── Щелчки и вибрация ───
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .distinctUntilChanged()
             .collect { index ->
-                // Индекс видимой строки. Центральный элемент — index + 1.
                 val centerIndex = index + 1
                 if (centerIndex in ages.indices) {
                     val newAge = ages[centerIndex]
@@ -83,7 +80,6 @@ fun AgeWheel(
             .height(180.dp),
         contentAlignment = Alignment.Center
     ) {
-        // ─── Подсветка центральной строки ───
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -120,11 +116,7 @@ fun AgeWheel(
     }
 }
 
-/**
- * Короткий щелчок + вибрация при прокрутке.
- */
 private fun playTick(context: android.content.Context) {
-    // Звук
     try {
         val toneGen = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 30)
         toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 15)
@@ -132,10 +124,9 @@ private fun playTick(context: android.content.Context) {
             toneGen.release()
         }, 60)
     } catch (_: Exception) {
-        // Игнор — на некоторых устройствах не работает
+        // Игнор
     }
 
-    // Вибрация
     try {
         val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val manager = context.getSystemService(VibratorManager::class.java)
