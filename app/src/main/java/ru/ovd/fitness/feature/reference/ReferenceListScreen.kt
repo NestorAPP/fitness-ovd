@@ -25,6 +25,8 @@ import androidx.navigation.NavHostController
 import ru.ovd.fitness.core.data.entity.Exercise
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
+import ru.ovd.fitness.core.ui.theme.OvdLightBlue
+import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
 import ru.ovd.fitness.core.ui.theme.TriRed
@@ -134,7 +136,7 @@ private fun ExerciseCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
-            .background(OvdDarkBlue)
+            .background(OvdLightBlue)
             .clickable(onClick = onClick)
             .padding(horizontal = 18.dp, vertical = 18.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -142,20 +144,20 @@ private fun ExerciseCard(
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = exercise.name,
-                color = TriWhite,
+                color = TextPrimary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = exercise.unit,
-                color = TriWhite.copy(alpha = 0.7f),
+                color = TextSecondary,
                 fontSize = 13.sp
             )
         }
         Text(
             text = "→",
-            color = TriWhite,
+            color = OvdDarkBlue,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
