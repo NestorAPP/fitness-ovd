@@ -51,14 +51,14 @@ fun InputScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ─── ШАПКА со светло-голубым фоном ───
+        // ─── ШАПКА ───
         HeaderBlock(title = "Физическая подготовка")
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .padding(top = 24.dp, bottom = 24.dp),
+                .padding(top = 8.dp, bottom = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
@@ -129,7 +129,7 @@ fun InputScreen(
 }
 
 // ═══════════════════════════════════════════════════════
-//   ШАПКА
+//   ШАПКА (используется всеми экранами)
 // ═══════════════════════════════════════════════════════
 
 @Composable
@@ -137,31 +137,38 @@ fun HeaderBlock(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
-            .background(OvdLightBlue)
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
         contentAlignment = Alignment.Center
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.headlineSmall,
-                color = OvdDarkBlue,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(20.dp))
+                .background(OvdLightBlue)
+                .padding(horizontal = 20.dp, vertical = 20.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = OvdDarkBlue,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
 
-            Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-            Row(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(2.dp))
-            ) {
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
+                Row(
+                    modifier = Modifier
+                        .width(80.dp)
+                        .height(4.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                ) {
+                    Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
+                    Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
+                    Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
+                }
             }
         }
     }
