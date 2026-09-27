@@ -24,11 +24,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
-import ru.ovd.fitness.core.ui.theme.SurfaceWhite
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
-import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
+import ru.ovd.fitness.feature.fitness.HeaderBlock
 
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
@@ -50,34 +49,9 @@ fun ReferenceDetailScreen(
             .windowInsetsPadding(WindowInsets.safeDrawing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // ─── Заголовок ───
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = state.exerciseName,
-                style = MaterialTheme.typography.titleLarge,
-                color = OvdDarkBlue,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(2.dp))
-            ) {
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
-            }
-        }
+        // ─── ШАПКА ───
+        HeaderBlock(title = state.exerciseName.ifEmpty { "Упражнение" })
 
         when {
             state.isLoading -> {
@@ -101,6 +75,8 @@ fun ReferenceDetailScreen(
             }
 
             else -> {
+                Spacer(modifier = Modifier.height(20.dp))
+
                 // ─── Колесо результатов ───
                 ResultWheel(
                     scores = state.scores,
@@ -162,14 +138,13 @@ fun ReferenceDetailScreen(
                         fontWeight = FontWeight.Bold
                     )
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
             }
         }
     }
 }
 
-/**
- * Колесо с результатами упражнения.
- */
 @OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 private fun ResultWheel(
@@ -202,7 +177,6 @@ private fun ResultWheel(
             .height(wheelHeight),
         contentAlignment = Alignment.Center
     ) {
-        // ─── Голубая подсветка центральной строки ───
         Box(
             modifier = Modifier
                 .fillMaxWidth()
