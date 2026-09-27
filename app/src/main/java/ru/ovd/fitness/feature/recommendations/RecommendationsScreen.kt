@@ -30,10 +30,8 @@ import ru.ovd.fitness.core.ui.theme.StatusRed
 import ru.ovd.fitness.core.ui.theme.SurfaceWhite
 import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
-import ru.ovd.fitness.core.ui.theme.TriBlue
-import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
-import kotlin.math.roundToInt
+import ru.ovd.fitness.feature.fitness.HeaderBlock
 
 @Composable
 fun RecommendationsScreen(
@@ -51,102 +49,89 @@ fun RecommendationsScreen(
             .fillMaxSize()
             .background(BackgroundSoft)
             .windowInsetsPadding(WindowInsets.safeDrawing)
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp, vertical = 24.dp),
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ─── Заголовок ───
-        Text(
-            text = "Рекомендации",
-            style = MaterialTheme.typography.headlineSmall,
-            color = OvdDarkBlue,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        // ─── ШАПКА ───
+        HeaderBlock(title = "Рекомендации")
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Row(
-            modifier = Modifier
-                .width(80.dp)
-                .height(4.dp)
-                .clip(RoundedCornerShape(2.dp))
-        ) {
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxWidth().height(300.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = OvdDarkBlue)
-                }
-            }
-
-            state.result == null -> {
-                Text(
-                    text = "Не удалось сформировать рекомендации.\nВернитесь и заполните данные заново.",
-                    color = TextSecondary,
-                    textAlign = TextAlign.Center,
-                    fontSize = 15.sp
-                )
-            }
-
-            else -> {
-                val result = state.result!!
-
-                // ─── ИМТ ───
-                BmiCard(
-                    bmi = result.bmi,
-                    category = result.bmiCategory.label
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // ─── Предупреждение ───
-                result.warning?.let { warning ->
-                    WarningCard(text = warning)
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                // ─── Блоки ───
-                result.blocks.forEach { block ->
-                    RecommendationBlockCard(block = block)
-                    Spacer(modifier = Modifier.height(14.dp))
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-
-        // ─── Кнопка «Изменить параметры» ───
-        Button(
-            onClick = { navController.popBackStack() },
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = OvdDarkBlue,
-                contentColor = TriWhite
-            )
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp, bottom = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "←  Изменить параметры",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().height(300.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = OvdDarkBlue)
+                    }
+                }
+
+                state.result == null -> {
+                    Text(
+                        text = "Не удалось сформировать рекомендации.\nВернитесь и заполните данные заново.",
+                        color = TextSecondary,
+                        textAlign = TextAlign.Center,
+                        fontSize = 15.sp
+                    )
+                }
+
+                else -> {
+                    val result = state.result!!
+
+                    // ─── ИМТ ───
+                    BmiCard(
+                        bmi = result.bmi,
+                        category = result.bmiCategory.label
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // ─── Предупреждение ───
+                    result.warning?.let { warning ->
+                        WarningCard(text = warning)
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    // ─── Блоки ───
+                    result.blocks.forEach { block ->
+                        RecommendationBlockCard(block = block)
+                        Spacer(modifier = Modifier.height(14.dp))
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // ─── Кнопка «Изменить параметры» ───
+            Button(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = OvdDarkBlue,
+                    contentColor = TriWhite
+                )
+            ) {
+                Text(
+                    text = "←  Изменить параметры",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
     }
 }
 
