@@ -1,12 +1,10 @@
 package ru.ovd.fitness.feature.home
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
-import androidx.compose.material.icons.filled.MyLocation
+import androidx.compose.material.icons.filled.MenuBook
 import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +29,7 @@ import ru.ovd.fitness.core.ui.theme.TriBlue
 import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
 import ru.ovd.fitness.feature.fitness.FitnessNavHost
-import ru.ovd.fitness.feature.shooting.ShootingScreen
+import ru.ovd.fitness.feature.reference.ReferenceNavHost
 import ru.ovd.fitness.feature.video.VideoScreen
 
 data class TabItem(
@@ -45,9 +43,9 @@ fun HomeScreen() {
     val navController = rememberNavController()
 
     val tabs = listOf(
-        TabItem("tab_fitness",  "Физо",    Icons.Default.FitnessCenter),
-        TabItem("tab_shooting", "Огневая", Icons.Default.MyLocation),
-        TabItem("tab_video",    "Видео",   Icons.Default.PlayCircle)
+        TabItem("tab_fitness",   "Физо",       Icons.Default.FitnessCenter),
+        TabItem("tab_reference", "Справочник", Icons.Default.MenuBook),
+        TabItem("tab_video",     "Видео",      Icons.Default.PlayCircle)
     )
 
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -62,7 +60,6 @@ fun HomeScreen() {
             ) {
                 tabs.forEach { tab ->
                     val selected = currentRoute == tab.route
-
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
@@ -80,13 +77,11 @@ fun HomeScreen() {
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                // ─── Полоска триколора над активной вкладкой ───
                                 if (selected) {
                                     Row(
                                         modifier = Modifier
                                             .width(28.dp)
                                             .height(3.dp)
-                                            .background(TriWhite)
                                     ) {
                                         Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
                                         Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
@@ -122,11 +117,10 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-            // Переходы между вкладками — мгновенные (без анимации)
         ) {
-            composable("tab_fitness")  { FitnessNavHost() }
-            composable("tab_shooting") { ShootingScreen() }
-            composable("tab_video")    { VideoScreen() }
+            composable("tab_fitness")   { FitnessNavHost() }
+            composable("tab_reference") { ReferenceNavHost() }
+            composable("tab_video")     { VideoScreen() }
         }
     }
 }
