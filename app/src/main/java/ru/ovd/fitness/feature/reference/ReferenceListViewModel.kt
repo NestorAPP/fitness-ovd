@@ -24,6 +24,11 @@ class ReferenceListViewModel(application: Application) : AndroidViewModel(applic
     private val _uiState = MutableStateFlow(ReferenceListUiState())
     val uiState: StateFlow<ReferenceListUiState> = _uiState
 
+    init {
+        // Загружаем данные сразу при создании ViewModel
+        load()
+    }
+
     fun load() {
         val gender = prefs.getGender()
 
