@@ -1,52 +1,47 @@
 package ru.ovd.fitness.feature.fitness
 
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import ru.ovd.fitness.core.data.UserPreferences
 
-/**
- * Состояние экрана ввода.
- *
- * Хранит то, что ввёл сотрудник: пол, возраст, уровень подготовки.
- */
 data class InputUiState(
-    /** Пол: "male" / "female" */
     val gender: String = "male",
-
-    /** Возраст: 18..70 */
     val age: Int = 30,
-
-    /** Уровень: "base" / "enhanced" / "special" */
     val level: String = "base"
 ) {
-    /** Можно ли нажать кнопку «Рассчитать» */
     val isValid: Boolean
         get() = age in 18..70
 }
 
-/**
- * ViewModel для экрана ввода.
- *
- * Отвечает за хранение введённых данных.
- */
-class InputViewModel : ViewModel() {
+class InputViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val _uiState = MutableStateFlow(InputUiState())
+    private val prefs = UserPreferences(application)
+
+    private val _uiState = MutableStateFlow(
+        InputUiState(
+            gender = prefs.getGender() ?: "male",
+            age = prefs.getAge() ?: 30,
+            level = prefs.getLevel() ?: "base"
+        )
+    )
     val uiState: StateFlow<InputUiState> = _uiState
 
-    /** Установить пол */
     fun setGender(gender: String) {
         _uiState.update { it.copy(gender = gender) }
+        prefs.setGender(gender)
     }
 
-    /** Установить возраст */
     fun setAge(age: Int) {
-        _uiState.update { it.copy(age = age.coerceIn(18, 70)) }
+        val safeAge = age.coerceIn(18, 70)
+        _uiState.update { it.copy(age = safeAge) }
+        prefs.setAge(safeAge)
     }
 
-    /** Установить уровень */
     fun setLevel(level: String) {
         _uiState.update { it.copy(level = level) }
+        prefs.setLevel(level)
     }
 }
