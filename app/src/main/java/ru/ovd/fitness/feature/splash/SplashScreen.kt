@@ -1,7 +1,6 @@
 package ru.ovd.fitness.feature.splash
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,7 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -26,17 +25,32 @@ import ru.ovd.fitness.core.ui.theme.TriWhite
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
 
-    val numberAlpha = remember { Animatable(0f) }
-    val numberScale = remember { Animatable(0.7f) }
-    val titleAlpha  = remember { Animatable(0f) }
-    val flagOffset  = remember { Animatable(80f) }
+    // Анимации:
+    // 1. Белая полоса выезжает слева
+    // 2. Синяя — сверху
+    // 3. Красная — справа
+    // 4. Название проявляется под флагом
+
+    val whiteOffset  = remember { Animatable(-400f) }
+    val blueOffset   = remember { Animatable(-400f) }
+    val redOffset    = remember { Animatable(400f) }
+
+    val titleAlpha   = remember { Animatable(0f) }
+    val subtitleAlpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-        numberAlpha.animateTo(1f, tween(700, easing = LinearEasing))
-        numberScale.animateTo(1f, tween(700))
+        // Белая — слева
+        whiteOffset.animateTo(0f, tween(400))
+        // Синяя — сверху
+        blueOffset.animateTo(0f, tween(400))
+        // Красная — справа
+        redOffset.animateTo(0f, tween(400))
+
+        // Название
         titleAlpha.animateTo(1f, tween(500))
-        flagOffset.animateTo(0f, tween(500))
-        delay(700)
+        subtitleAlpha.animateTo(1f, tween(400))
+
+        delay(800)
         onFinished()
     }
 
@@ -48,67 +62,62 @@ fun SplashScreen(onFinished: () -> Unit) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "44",
-                color = TriWhite,
-                fontSize = 120.sp,
-                fontWeight = FontWeight.Bold,
+            // ─── ФЛАГ: три полосы ───
+            Column(
                 modifier = Modifier
-                    .alpha(numberAlpha.value)
-                    .scale(numberScale.value)
-            )
+                    .width(220.dp)
+                    .height(132.dp)
+            ) {
+                // Белая — выезжает слева
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .offset(x = whiteOffset.value.dp)
+                        .background(TriWhite)
+                )
+                // Синяя — выезжает сверху
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .offset(y = blueOffset.value.dp / 3)
+                        .background(TriBlue)
+                )
+                // Красная — выезжает справа
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .offset(x = redOffset.value.dp)
+                        .background(TriRed)
+                )
+            }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
+            // ─── Название ───
             Text(
-                text = "Физподготовка\nсотрудников ОВД",
+                text = "Физо ОВД",
                 color = TriWhite,
-                fontSize = 24.sp,
+                fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
-                lineHeight = 32.sp,
                 modifier = Modifier.alpha(titleAlpha.value)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Приказ МВД № 44 от 2024 года",
+                text = "Физическая подготовка",
                 color = TriWhite.copy(alpha = 0.7f),
-                fontSize = 14.sp,
+                fontSize = 16.sp,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.alpha(titleAlpha.value)
+                modifier = Modifier.alpha(subtitleAlpha.value)
             )
-        }
-
-        Column(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .offset(y = flagOffset.value.dp)
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .background(TriWhite)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .background(TriBlue)
-            )
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(4.dp)
-                    .background(TriRed)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
