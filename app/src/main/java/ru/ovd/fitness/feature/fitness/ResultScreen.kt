@@ -29,8 +29,6 @@ import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.SurfaceWhite
 import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
-import ru.ovd.fitness.core.ui.theme.TriBlue
-import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
 
 @Composable
@@ -43,7 +41,6 @@ fun ResultScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    // ─── Запуск расчёта с реальными данными ───
     LaunchedEffect(gender, age, level) {
         viewModel.calculate(gender = gender, age = age, level = level)
     }
@@ -53,126 +50,111 @@ fun ResultScreen(
             .fillMaxSize()
             .background(BackgroundSoft)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-            .padding(vertical = 24.dp),
+            .windowInsetsPadding(WindowInsets.safeDrawing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = "Твои нормативы",
-            style = MaterialTheme.typography.headlineSmall,
-            color = OvdDarkBlue,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        // ─── ШАПКА ───
+        HeaderBlock(title = "Твои нормативы")
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Row(
+        Column(
             modifier = Modifier
-                .width(80.dp)
-                .height(4.dp)
-                .clip(RoundedCornerShape(2.dp))
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(top = 20.dp, bottom = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
-        }
 
-        Spacer(modifier = Modifier.height(20.dp))
+            // ─── Введённые данные ───
+            Text(
+                text = formatInput(gender, age, level),
+                color = TextSecondary,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
 
-        // ─── Введённые данные (для проверки) ───
-        Text(
-            text = formatInput(gender, age, level),
-            color = TextSecondary,
-            fontSize = 14.sp,
-            textAlign = TextAlign.Center
-        )
+            Spacer(modifier = Modifier.height(20.dp))
 
-        Spacer(modifier = Modifier.height(24.dp))
+            when {
+                state.isLoading -> {
+                    Box(
+                        modifier = Modifier.fillMaxWidth().height(200.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = OvdDarkBlue)
+                    }
+                }
 
-        when {
-            state.isLoading -> {
-                CircularProgressIndicator(color = OvdDarkBlue)
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = "Считаем...",
-                    color = TextSecondary,
-                    fontSize = 14.sp
-                )
+                state.error != null -> {
+                    Text(
+                        text = state.error ?: "",
+                        color = TextSecondary,
+                        textAlign = TextAlign.Center,
+                        fontSize = 16.sp
+                    )
+                }
+
+                else -> {
+                    InfoCard(
+                        title = "Возрастная группа",
+                        value = "Группа ${state.ageGroupNumber} · ${state.ageGroupLabel}",
+                        valueColor = OvdDarkBlue
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    ScoreCard(
+                        label = "Минимум для сдачи",
+                        value = state.minPoints.toString(),
+                        subtitle = "Рекомендуем набрать ${state.recommendedPoints}",
+                        isMain = true
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text(
+                        text = "Квалификационные звания",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = OvdDarkBlue,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    state.qualifications.forEach { q ->
+                        QualificationRow(name = q.name, points = q.minPoints)
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
             }
 
-            state.error != null -> {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = { navController.popBackStack() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = OvdDarkBlue,
+                    contentColor = TriWhite
+                )
+            ) {
                 Text(
-                    text = state.error ?: "",
-                    color = TriRed,
-                    textAlign = TextAlign.Center,
+                    text = "←  Изменить данные",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
                     fontSize = 16.sp
                 )
             }
 
-            else -> {
-                InfoCard(
-                    title = "Возрастная группа",
-                    value = "Группа ${state.ageGroupNumber} · ${state.ageGroupLabel}",
-                    valueColor = OvdDarkBlue
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                ScoreCard(
-                    label = "Минимум для сдачи",
-                    value = state.minPoints.toString(),
-                    subtitle = "Рекомендуем набрать ${state.recommendedPoints}",
-                    isMain = true
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = "Квалификационные звания",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = OvdDarkBlue,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                state.qualifications.forEach { q ->
-                    QualificationRow(name = q.name, points = q.minPoints)
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-            }
+            Spacer(modifier = Modifier.height(24.dp))
         }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = { navController.popBackStack() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = OvdDarkBlue,
-                contentColor = TriWhite
-            )
-        ) {
-            Text(
-                text = "←  Изменить данные",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
-// ─── Форматирование «введённых данных» ───
 private fun formatInput(gender: String, age: Int, level: String): String {
     val g = when (gender) {
         "male" -> "Мужской"
