@@ -10,13 +10,9 @@ import ru.ovd.fitness.core.data.FitnessRepository
 import ru.ovd.fitness.core.data.UserPreferences
 import ru.ovd.fitness.core.data.entity.Exercise
 
-/**
- * Состояние экрана списка упражнений.
- */
 data class ReferenceListUiState(
     val isLoading: Boolean = true,
-    val genderNotSelected: Boolean = false,
-    val gender: String = "",
+    val gender: String = "male",
     val exercises: List<Exercise> = emptyList()
 )
 
@@ -28,17 +24,8 @@ class ReferenceListViewModel(application: Application) : AndroidViewModel(applic
     private val _uiState = MutableStateFlow(ReferenceListUiState())
     val uiState: StateFlow<ReferenceListUiState> = _uiState
 
-    /** Загрузить список упражнений */
     fun load() {
         val gender = prefs.getGender()
-
-        if (gender == null) {
-            _uiState.value = ReferenceListUiState(
-                isLoading = false,
-                genderNotSelected = true
-            )
-            return
-        }
 
         _uiState.value = ReferenceListUiState(isLoading = true, gender = gender)
 
@@ -53,7 +40,6 @@ class ReferenceListViewModel(application: Application) : AndroidViewModel(applic
             } catch (e: Exception) {
                 _uiState.value = ReferenceListUiState(
                     isLoading = false,
-                    genderNotSelected = false,
                     gender = gender,
                     exercises = emptyList()
                 )
