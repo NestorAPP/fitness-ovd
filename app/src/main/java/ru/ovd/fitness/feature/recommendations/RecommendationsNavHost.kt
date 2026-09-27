@@ -2,6 +2,7 @@ package ru.ovd.fitness.feature.recommendations
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,12 +15,10 @@ fun RecommendationsNavHost(
     depthHolder: NavDepthHolder,
     navController: NavHostController = rememberNavController()
 ) {
-    // Следим за стеком навигации
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
     LaunchedEffect(currentRoute) {
-        // «В глубине» — всё, что НЕ стартовый экран
         val isDeep = currentRoute != null && currentRoute != "recommendations_start"
         depthHolder.setDepth("recommendations", isDeep)
     }
