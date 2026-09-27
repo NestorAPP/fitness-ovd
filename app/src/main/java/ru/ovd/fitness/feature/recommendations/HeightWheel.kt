@@ -1,5 +1,11 @@
 package ru.ovd.fitness.feature.recommendations
 
+import android.media.AudioManager
+import android.media.ToneGenerator
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import android.os.VibratorManager
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.snapping.rememberSnapFlingBehavior
@@ -7,7 +13,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,6 +26,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,9 +35,6 @@ import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
 
-/**
- * Колесо выбора роста (140..220 см).
- */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HeightWheel(
@@ -52,6 +55,8 @@ fun HeightWheel(
     )
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
+    val context = LocalContext.current
+
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .distinctUntilChanged()
@@ -60,6 +65,7 @@ fun HeightWheel(
                     val newHeight = heights[index]
                     if (newHeight != selectedHeight) {
                         onHeightChange(newHeight)
+                        playTick(context)
                     }
                 }
             }
@@ -104,4 +110,32 @@ fun HeightWheel(
             }
         }
     }
+}
+
+private fun playTick(context: android.content.Context) {
+    try {
+        val toneGen = ToneGenerator(AudioManager.STREAM_NOTIFICATION, 30)
+        toneGen.startTone(ToneGenerator.TONE_PROP_BEEP, 15)
+        android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
+            toneGen.release()
+        }, 60)
+    } catch (_: Exception) {}
+
+    try {
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val manager = context.getSystemService(VibratorManager::class.java)
+            manager?.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Vibrator::class.java)
+        }
+        vibrator?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                it.vibrate(VibrationEffect.createOneShot(15, 40))
+            } else {
+                @Suppress("DEPRECATION")
+                it.vibrate(15)
+            }
+        }
+    } catch (_: Exception) {}
 }
