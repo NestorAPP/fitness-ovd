@@ -7,9 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import ru.ovd.fitness.core.data.FitnessRepository
-import ru.ovd.fitness.core.data.ScoreFiller
 import ru.ovd.fitness.core.data.UserPreferences
-import ru.ovd.fitness.core.data.entity.Exercise
 import ru.ovd.fitness.core.data.entity.ExerciseScore
 
 data class ReferenceDetailUiState(
@@ -34,14 +32,6 @@ class ReferenceDetailViewModel(application: Application) : AndroidViewModel(appl
 
     fun load(orderNumber: Int) {
         val gender = prefs.getGender()
-        if (gender == null) {
-            _uiState.value = ReferenceDetailUiState(
-                isLoading = false,
-                error = "Выберите пол в разделе «Физо»"
-            )
-            return
-        }
-
         _uiState.value = ReferenceDetailUiState(isLoading = true)
 
         viewModelScope.launch {
@@ -58,13 +48,17 @@ class ReferenceDetailViewModel(application: Application) : AndroidViewModel(appl
                 }
 
                 val rawScores = repo.getExerciseScores(gender, orderNumber)
-                val filledScores = ScoreFiller.fill(rawScores)
+
+                // Убираем прочерки (строки без значений)
+                val withoutDashes = rawScores.filter {
+                    it.resultMinSec != null || it.resultMaxSec != null
+                }
 
                 _uiState.value = ReferenceDetailUiState(
                     isLoading = false,
                     exerciseName = exercise.name,
                     exerciseUnit = exercise.unit,
-                    scores = filledScores,
+                    scores = withoutDashes,
                     selectedIndex = 0
                 )
             } catch (e: Exception) {
