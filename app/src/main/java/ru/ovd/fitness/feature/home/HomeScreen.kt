@@ -2,6 +2,8 @@ package ru.ovd.fitness.feature.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.MenuBook
@@ -14,42 +16,46 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
 import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
 import ru.ovd.fitness.feature.fitness.FitnessNavHost
-import ru.ovd.fitness.feature.reference.ReferenceNavHost
 import ru.ovd.fitness.feature.recommendations.RecommendationsNavHost
+import ru.ovd.fitness.feature.reference.ReferenceNavHost
 
 data class TabItem(
-    val route: String,
     val title: String,
     val icon: ImageVector
 )
 
 @Composable
 fun HomeScreen() {
-    val navController = rememberNavController()
+    val scope = rememberCoroutineScope()
 
     val tabs = listOf(
-        TabItem("tab_fitness",         "Итоговый бал",  Icons.Default.FitnessCenter),
-        TabItem("tab_reference",       "Справочник",    Icons.Default.MenuBook),
-        TabItem("tab_recommendations", "Рекомендации",  Icons.Default.TipsAndUpdates)
+        TabItem("Итоговый бал",  Icons.Default.FitnessCenter),
+        TabItem("Справочник",    Icons.Default.MenuBook),
+        TabItem("Рекомендации",  Icons.Default.TipsAndUpdates)
     )
 
-    val backStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = backStackEntry?.destination?.route
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { tabs.size }
+    )
+
+    // Следим за сменой страницы — чтобы при свайпе таб-бар подсвечивался
+    val currentPage = pagerState.currentPage
 
     Scaffold(
         bottomBar = {
@@ -58,19 +64,14 @@ fun HomeScreen() {
                 tonalElevation = 4.dp,
                 modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
             ) {
-                tabs.forEach { tab ->
-                    val selected = currentRoute == tab.route
+                tabs.forEachIndexed { index, tab ->
+                    val selected = currentPage == index
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
-                            if (!selected) {
-                                navController.navigate(tab.route) {
-                                    popUpTo(navController.graph.startDestinationId) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop = true
-                                    restoreState = true
-                                }
+                            // Тап на таб — перелистываем Pager
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
                             }
                         },
                         icon = {
@@ -111,16 +112,17 @@ fun HomeScreen() {
             }
         }
     ) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = "tab_fitness",
+        HorizontalPager(
+            state = pagerState,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        ) {
-            composable("tab_fitness")         { FitnessNavHost() }
-            composable("tab_reference")       { ReferenceNavHost() }
-            composable("tab_recommendations") { RecommendationsNavHost() }
+        ) { page ->
+            when (page) {
+                0 -> FitnessNavHost()
+                1 -> ReferenceNavHost()
+                2 -> RecommendationsNavHost()
+            }
         }
     }
 }
