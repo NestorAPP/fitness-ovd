@@ -7,7 +7,7 @@ import androidx.core.content.edit
  * Хранилище пользовательских настроек приложения.
  *
  * Сейчас хранит:
- *   - Пол сотрудника ("male" / "female").
+ *   - Пол сотрудника ("male" / "female"). По умолчанию — "male".
  *   - Возраст.
  *   - Уровень подготовки.
  *
@@ -26,9 +26,9 @@ class UserPreferences(context: Context) {
         prefs.edit { putString(KEY_GENDER, gender) }
     }
 
-    /** Получить пол. null — если сотрудник ещё не вводил */
-    fun getGender(): String? {
-        return prefs.getString(KEY_GENDER, null)
+    /** Получить пол. По умолчанию — "male" */
+    fun getGender(): String {
+        return prefs.getString(KEY_GENDER, "male") ?: "male"
     }
 
     /** Сохранить возраст */
@@ -36,10 +36,9 @@ class UserPreferences(context: Context) {
         prefs.edit { putInt(KEY_AGE, age) }
     }
 
-    /** Получить возраст. null — если ещё не вводил */
-    fun getAge(): Int? {
-        val age = prefs.getInt(KEY_AGE, -1)
-        return if (age == -1) null else age
+    /** Получить возраст. По умолчанию — 30 */
+    fun getAge(): Int {
+        return prefs.getInt(KEY_AGE, 30)
     }
 
     /** Сохранить уровень */
@@ -47,9 +46,9 @@ class UserPreferences(context: Context) {
         prefs.edit { putString(KEY_LEVEL, level) }
     }
 
-    /** Получить уровень. null — если ещё не вводил */
-    fun getLevel(): String? {
-        return prefs.getString(KEY_LEVEL, null)
+    /** Получить уровень. По умолчанию — "base" */
+    fun getLevel(): String {
+        return prefs.getString(KEY_LEVEL, "base") ?: "base"
     }
 
     /** Сохранить все данные сразу */
@@ -61,7 +60,7 @@ class UserPreferences(context: Context) {
         }
     }
 
-    /** Очистить всё (например, при выходе) */
+    /** Очистить всё */
     fun clear() {
         prefs.edit { clear() }
     }
