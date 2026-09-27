@@ -25,8 +25,6 @@ import androidx.navigation.NavHostController
 import ru.ovd.fitness.core.data.entity.Exercise
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
-import ru.ovd.fitness.core.ui.theme.SurfaceWhite
-import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
 import ru.ovd.fitness.core.ui.theme.TriRed
@@ -79,69 +77,49 @@ fun ReferenceListScreen(
         }
 
         // ─── Содержимое ───
-        when {
-            state.isLoading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(color = OvdDarkBlue)
-                }
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = OvdDarkBlue)
             }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+            ) {
+                val grouped = state.exercises.groupBy { it.category }
 
-            state.genderNotSelected -> {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(32.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Выберите пол в разделе «Физо»",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = TextSecondary,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            }
-
-            else -> {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
-                ) {
-                    val grouped = state.exercises.groupBy { it.category }
-
-                    grouped.forEach { (category, exercises) ->
-                        item {
-                            Text(
-                                text = category.uppercase(),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = TextSecondary,
-                                fontWeight = FontWeight.Bold,
-                                modifier = Modifier.padding(
-                                    start = 4.dp,
-                                    top = 16.dp,
-                                    bottom = 8.dp
-                                )
+                grouped.forEach { (category, exercises) ->
+                    item {
+                        Text(
+                            text = category.uppercase(),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = TextSecondary,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier.padding(
+                                start = 4.dp,
+                                top = 16.dp,
+                                bottom = 8.dp
                             )
-                        }
-
-                        items(exercises) { exercise ->
-                            ExerciseCard(
-                                exercise = exercise,
-                                onClick = {
-                                    navController.navigate(
-                                        "reference_detail?orderNumber=${exercise.orderNumber}"
-                                    )
-                                }
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                        }
+                        )
                     }
 
-                    item { Spacer(modifier = Modifier.height(24.dp)) }
+                    items(exercises) { exercise ->
+                        ExerciseCard(
+                            exercise = exercise,
+                            onClick = {
+                                navController.navigate(
+                                    "reference_detail?orderNumber=${exercise.orderNumber}"
+                                )
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                    }
                 }
+
+                item { Spacer(modifier = Modifier.height(24.dp)) }
             }
         }
     }
@@ -156,29 +134,29 @@ private fun ExerciseCard(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(14.dp))
-            .background(SurfaceWhite)
+            .background(OvdDarkBlue)
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 16.dp),
+            .padding(horizontal = 18.dp, vertical = 18.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = exercise.name,
-                color = TextPrimary,
+                color = TriWhite,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = exercise.unit,
-                color = TextSecondary,
+                color = TriWhite.copy(alpha = 0.7f),
                 fontSize = 13.sp
             )
         }
         Text(
             text = "→",
-            color = OvdDarkBlue,
-            fontSize = 20.sp,
+            color = TriWhite,
+            fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
     }
