@@ -2,8 +2,6 @@ package ru.ovd.fitness.feature.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.MenuBook
@@ -16,14 +14,15 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
-import ru.ovd.fitness.core.ui.navigation.NavDepthHolder
-import ru.ovd.fitness.core.ui.navigation.rememberNavDepthHolder
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
@@ -34,32 +33,23 @@ import ru.ovd.fitness.feature.recommendations.RecommendationsNavHost
 import ru.ovd.fitness.feature.reference.ReferenceNavHost
 
 data class TabItem(
-    val key: String,
+    val route: String,
     val title: String,
     val icon: ImageVector
 )
 
-@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen() {
-    val scope = rememberCoroutineScope()
-    val depthHolder: NavDepthHolder = rememberNavDepthHolder()
+    val navController = rememberNavController()
 
     val tabs = listOf(
-        TabItem("fitness",         "Итоговый бал",  Icons.Default.FitnessCenter),
-        TabItem("reference",       "Справочник",    Icons.Default.MenuBook),
-        TabItem("recommendations", "Рекомендации",  Icons.Default.TipsAndUpdates)
+        TabItem("tab_fitness",         "Итоговый бал",  Icons.Default.FitnessCenter),
+        TabItem("tab_reference",       "Справочник",    Icons.Default.MenuBook),
+        TabItem("tab_recommendations", "Рекомендации",  Icons.Default.TipsAndUpdates)
     )
 
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        pageCount = { tabs.size }
-    )
-
-    val currentPage = pagerState.currentPage
-
-    // ─── Свайп разрешён, только если НИ ОДНА вкладка не в глубине ───
-    val swipeEnabled = !depthHolder.anyDeep()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
 
     Scaffold(
         bottomBar = {
@@ -68,16 +58,19 @@ fun HomeScreen() {
                 tonalElevation = 4.dp,
                 modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars)
             ) {
-                tabs.forEachIndexed { index, tab ->
-                    val selected = currentPage == index
+                tabs.forEach { tab ->
+                    val selected = currentRoute == tab.route
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
-                            // Сбрасываем «глубину» вкладки, на которую переходим
-                            depthHolder.setDepth(tab.key, false)
-
-                            scope.launch {
-                                pagerState.animateScrollToPage(index)
+                            if (!selected) {
+                                navController.navigate(tab.route) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop = true
+                                    restoreState = true
+                                }
                             }
                         },
                         icon = {
@@ -118,18 +111,16 @@ fun HomeScreen() {
             }
         }
     ) { innerPadding ->
-        HorizontalPager(
-            state = pagerState,
-            userScrollEnabled = swipeEnabled,
+        NavHost(
+            navController = navController,
+            startDestination = "tab_fitness",
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
-        ) { page ->
-            when (page) {
-                0 -> FitnessNavHost(depthHolder = depthHolder)
-                1 -> ReferenceNavHost(depthHolder = depthHolder)
-                2 -> RecommendationsNavHost(depthHolder = depthHolder)
-            }
+        ) {
+            composable("tab_fitness")         { FitnessNavHost() }
+            composable("tab_reference")       { ReferenceNavHost() }
+            composable("tab_recommendations") { RecommendationsNavHost() }
         }
     }
 }
