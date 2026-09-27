@@ -10,6 +10,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,13 +39,16 @@ fun ReferenceListScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.load()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundSoft)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        // ─── Заголовок ───
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -73,7 +77,6 @@ fun ReferenceListScreen(
             }
         }
 
-        // ─── Содержимое ───
         if (state.isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
