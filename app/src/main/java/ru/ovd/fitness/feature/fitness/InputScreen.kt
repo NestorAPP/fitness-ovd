@@ -47,99 +47,129 @@ fun InputScreen(
             .fillMaxSize()
             .background(BackgroundSoft)
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp)
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-            .padding(vertical = 24.dp),
+            .windowInsetsPadding(WindowInsets.safeDrawing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Text(
-            text = "Физическая подготовка",
-            style = MaterialTheme.typography.headlineSmall,
-            color = OvdDarkBlue,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        // ─── ШАПКА со светло-голубым фоном ───
+        HeaderBlock(title = "Физическая подготовка")
 
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Row(
-            modifier = Modifier
-                .width(80.dp)
-                .height(4.dp)
-                .clip(RoundedCornerShape(2.dp))
-        ) {
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
-            Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
-        }
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        SectionTitle("Пол")
-        Spacer(modifier = Modifier.height(12.dp))
-        GenderToggle(state.gender) { viewModel.setGender(it) }
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        SectionTitle("Возраст")
-        Spacer(modifier = Modifier.height(12.dp))
-        AgeWheel(
-            selectedAge = state.age,
-            onAgeChange = { viewModel.setAge(it) }
-        )
-
-        Spacer(modifier = Modifier.height(28.dp))
-
-        SectionTitle("Уровень подготовки")
-        Spacer(modifier = Modifier.height(12.dp))
-
-        LevelOption("Базовый",
-            "Для сотрудников, не являющихся сотрудниками полиции, и 4 группы предназначения",
-            state.level == "base"
-        ) { viewModel.setLevel("base") }
-        Spacer(modifier = Modifier.height(10.dp))
-
-        LevelOption("Усиленный",
-            "Для сотрудников полиции (1–3 группы предназначения)",
-            state.level == "enhanced"
-        ) { viewModel.setLevel("enhanced") }
-        Spacer(modifier = Modifier.height(10.dp))
-
-        LevelOption("Специальный",
-            "Для спецподразделений (СОБР, ОМОН и т.д.)",
-            state.level == "special"
-        ) { viewModel.setLevel("special") }
-
-        Spacer(modifier = Modifier.height(32.dp))
-
-        Button(
-            onClick = {
-                navController.navigate(
-                    "fitness_result?gender=${state.gender}&age=${state.age}&level=${state.level}"
-                )
-            },
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp),
-            shape = RoundedCornerShape(14.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = OvdDarkBlue,
-                contentColor = TriWhite
-            ),
-            enabled = state.isValid
+                .padding(horizontal = 20.dp)
+                .padding(top = 24.dp, bottom = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Рассчитать нормативы",
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
 
-        Spacer(modifier = Modifier.height(24.dp))
+            SectionTitle("Пол")
+            Spacer(modifier = Modifier.height(12.dp))
+            GenderToggle(state.gender) { viewModel.setGender(it) }
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            SectionTitle("Возраст")
+            Spacer(modifier = Modifier.height(12.dp))
+            AgeWheel(
+                selectedAge = state.age,
+                onAgeChange = { viewModel.setAge(it) }
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            SectionTitle("Уровень подготовки")
+            Spacer(modifier = Modifier.height(12.dp))
+
+            LevelOption("Базовый",
+                "Для сотрудников, не являющихся сотрудниками полиции, и 4 группы предназначения",
+                state.level == "base"
+            ) { viewModel.setLevel("base") }
+            Spacer(modifier = Modifier.height(10.dp))
+
+            LevelOption("Усиленный",
+                "Для сотрудников полиции (1–3 группы предназначения)",
+                state.level == "enhanced"
+            ) { viewModel.setLevel("enhanced") }
+            Spacer(modifier = Modifier.height(10.dp))
+
+            LevelOption("Специальный",
+                "Для спецподразделений (СОБР, ОМОН и т.д.)",
+                state.level == "special"
+            ) { viewModel.setLevel("special") }
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            Button(
+                onClick = {
+                    navController.navigate(
+                        "fitness_result?gender=${state.gender}&age=${state.age}&level=${state.level}"
+                    )
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                shape = RoundedCornerShape(14.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = OvdDarkBlue,
+                    contentColor = TriWhite
+                ),
+                enabled = state.isValid
+            ) {
+                Text(
+                    text = "Рассчитать нормативы",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+        }
     }
 }
+
+// ═══════════════════════════════════════════════════════
+//   ШАПКА
+// ═══════════════════════════════════════════════════════
+
+@Composable
+fun HeaderBlock(title: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(bottomStart = 24.dp, bottomEnd = 24.dp))
+            .background(OvdLightBlue)
+            .padding(horizontal = 20.dp, vertical = 24.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.headlineSmall,
+                color = OvdDarkBlue,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Row(
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(4.dp)
+                    .clip(RoundedCornerShape(2.dp))
+            ) {
+                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
+                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
+                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
+            }
+        }
+    }
+}
+
+// ═══════════════════════════════════════════════════════
+//   ОСТАЛЬНЫЕ КОМПОНЕНТЫ
+// ═══════════════════════════════════════════════════════
 
 @Composable
 private fun SectionTitle(text: String) {
