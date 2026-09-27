@@ -28,9 +28,7 @@ import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.OvdLightBlue
 import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
-import ru.ovd.fitness.core.ui.theme.TriBlue
-import ru.ovd.fitness.core.ui.theme.TriRed
-import ru.ovd.fitness.core.ui.theme.TriWhite
+import ru.ovd.fitness.feature.fitness.HeaderBlock
 
 @Composable
 fun ReferenceListScreen(
@@ -49,34 +47,9 @@ fun ReferenceListScreen(
             .background(BackgroundSoft)
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
-        // ─── Заголовок ───
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "Справочник",
-                style = MaterialTheme.typography.headlineSmall,
-                color = OvdDarkBlue,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.Center
-            )
 
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(4.dp)
-                    .clip(RoundedCornerShape(2.dp))
-            ) {
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriWhite))
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
-                Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
-            }
-        }
+        // ─── ШАПКА ───
+        HeaderBlock(title = "Справочник")
 
         // ─── Содержимое ───
         if (state.isLoading) {
@@ -103,7 +76,7 @@ fun ReferenceListScreen(
         } else {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp)
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 16.dp)
             ) {
                 val grouped = state.exercises.groupBy { it.category }
 
