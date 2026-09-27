@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.MenuBook
-import androidx.compose.material.icons.filled.PlayCircle
+import androidx.compose.material.icons.filled.TipsAndUpdates
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -30,7 +30,7 @@ import ru.ovd.fitness.core.ui.theme.TriRed
 import ru.ovd.fitness.core.ui.theme.TriWhite
 import ru.ovd.fitness.feature.fitness.FitnessNavHost
 import ru.ovd.fitness.feature.reference.ReferenceNavHost
-import ru.ovd.fitness.feature.video.VideoScreen
+import ru.ovd.fitness.feature.recommendations.RecommendationsNavHost
 
 data class TabItem(
     val route: String,
@@ -43,9 +43,9 @@ fun HomeScreen() {
     val navController = rememberNavController()
 
     val tabs = listOf(
-        TabItem("tab_fitness",   "Физо",       Icons.Default.FitnessCenter),
-        TabItem("tab_reference", "Справочник", Icons.Default.MenuBook),
-        TabItem("tab_video",     "Видео",      Icons.Default.PlayCircle)
+        TabItem("tab_fitness",         "Итоговый бал",  Icons.Default.FitnessCenter),
+        TabItem("tab_reference",       "Справочник",    Icons.Default.MenuBook),
+        TabItem("tab_recommendations", "Рекомендации",  Icons.Default.TipsAndUpdates)
     )
 
     val backStackEntry by navController.currentBackStackEntryAsState()
@@ -98,7 +98,7 @@ fun HomeScreen() {
                                 )
                             }
                         },
-                        label = { Text(tab.title) },
+                        label = { Text(tab.title, maxLines = 1) },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor   = OvdDarkBlue,
                             selectedTextColor   = OvdDarkBlue,
@@ -118,9 +118,9 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable("tab_fitness")   { FitnessNavHost() }
-            composable("tab_reference") { ReferenceNavHost() }
-            composable("tab_video")     { VideoScreen() }
+            composable("tab_fitness")         { FitnessNavHost() }
+            composable("tab_reference")       { ReferenceNavHost() }
+            composable("tab_recommendations") { RecommendationsNavHost() }
         }
     }
 }
