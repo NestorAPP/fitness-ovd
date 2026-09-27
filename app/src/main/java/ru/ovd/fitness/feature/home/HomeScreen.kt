@@ -16,13 +16,14 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import ru.ovd.fitness.core.ui.navigation.NavDepthHolder
+import ru.ovd.fitness.core.ui.navigation.rememberNavDepthHolder
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriBlue
@@ -33,6 +34,7 @@ import ru.ovd.fitness.feature.recommendations.RecommendationsNavHost
 import ru.ovd.fitness.feature.reference.ReferenceNavHost
 
 data class TabItem(
+    val key: String,
     val title: String,
     val icon: ImageVector
 )
@@ -41,11 +43,12 @@ data class TabItem(
 @Composable
 fun HomeScreen() {
     val scope = rememberCoroutineScope()
+    val depthHolder: NavDepthHolder = rememberNavDepthHolder()
 
     val tabs = listOf(
-        TabItem("Итоговый бал",  Icons.Default.FitnessCenter),
-        TabItem("Справочник",    Icons.Default.MenuBook),
-        TabItem("Рекомендации",  Icons.Default.TipsAndUpdates)
+        TabItem("fitness",         "Итоговый бал",  Icons.Default.FitnessCenter),
+        TabItem("reference",       "Справочник",    Icons.Default.MenuBook),
+        TabItem("recommendations", "Рекомендации",  Icons.Default.TipsAndUpdates)
     )
 
     val pagerState = rememberPagerState(
@@ -54,6 +57,9 @@ fun HomeScreen() {
     )
 
     val currentPage = pagerState.currentPage
+
+    // ─── Свайп разрешён, только если НИ ОДНА вкладка не в глубине ───
+    val swipeEnabled = !depthHolder.anyDeep()
 
     Scaffold(
         bottomBar = {
@@ -67,6 +73,9 @@ fun HomeScreen() {
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
+                            // Сбрасываем «глубину» вкладки, на которую переходим
+                            depthHolder.setDepth(tab.key, false)
+
                             scope.launch {
                                 pagerState.animateScrollToPage(index)
                             }
@@ -111,14 +120,15 @@ fun HomeScreen() {
     ) { innerPadding ->
         HorizontalPager(
             state = pagerState,
+            userScrollEnabled = swipeEnabled,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) { page ->
             when (page) {
-                0 -> FitnessNavHost()
-                1 -> ReferenceNavHost()
-                2 -> RecommendationsNavHost()
+                0 -> FitnessNavHost(depthHolder = depthHolder)
+                1 -> ReferenceNavHost(depthHolder = depthHolder)
+                2 -> RecommendationsNavHost(depthHolder = depthHolder)
             }
         }
     }
