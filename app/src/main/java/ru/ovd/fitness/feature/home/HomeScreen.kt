@@ -16,10 +16,8 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,6 +37,7 @@ data class TabItem(
     val icon: ImageVector
 )
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen() {
     val scope = rememberCoroutineScope()
@@ -54,7 +53,6 @@ fun HomeScreen() {
         pageCount = { tabs.size }
     )
 
-    // Следим за сменой страницы — чтобы при свайпе таб-бар подсвечивался
     val currentPage = pagerState.currentPage
 
     Scaffold(
@@ -69,7 +67,6 @@ fun HomeScreen() {
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
-                            // Тап на таб — перелистываем Pager
                             scope.launch {
                                 pagerState.animateScrollToPage(index)
                             }
