@@ -2,6 +2,7 @@ package ru.ovd.fitness.feature.reference
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,7 +17,6 @@ fun ReferenceNavHost(
     depthHolder: NavDepthHolder,
     navController: NavHostController = rememberNavController()
 ) {
-    // Следим за стеком навигации
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
@@ -41,8 +41,8 @@ fun ReferenceNavHost(
                     defaultValue = 1
                 }
             )
-        ) { backStackEntry ->
-            val orderNumber = backStackEntry.arguments?.getInt("orderNumber") ?: 1
+        ) { entry ->
+            val orderNumber = entry.arguments?.getInt("orderNumber") ?: 1
             ReferenceDetailScreen(
                 navController = navController,
                 orderNumber = orderNumber
