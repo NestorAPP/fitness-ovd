@@ -75,6 +75,15 @@ fun ReferenceListScreen(
                 Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
                 Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
             }
+
+            // ─── ОТЛАДКА ───
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = "DEBUG: isLoading=${state.isLoading}, gender=${state.gender}, count=${state.exercises.size}",
+                color = TriRed,
+                fontSize = 11.sp,
+                textAlign = TextAlign.Center
+            )
         }
 
         if (state.isLoading) {
@@ -83,6 +92,21 @@ fun ReferenceListScreen(
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(color = OvdDarkBlue)
+            }
+        } else if (state.exercises.isEmpty()) {
+            // ─── ЕСЛИ ПУСТО ───
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Список пуст.\nПопробуйте вернуться на «Итоговый бал» и обратно.",
+                    color = TextSecondary,
+                    fontSize = 14.sp,
+                    textAlign = TextAlign.Center
+                )
             }
         } else {
             LazyColumn(
