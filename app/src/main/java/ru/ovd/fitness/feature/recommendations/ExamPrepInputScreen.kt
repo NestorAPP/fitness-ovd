@@ -52,7 +52,6 @@ fun ExamPrepInputScreen(
     viewModel: ExamPrepInputViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
-
     val context = LocalContext.current
     val prefs = UserPreferences(context)
     val repository = remember { FitnessRepository(context) }
@@ -77,7 +76,6 @@ fun ExamPrepInputScreen(
             .windowInsetsPadding(WindowInsets.safeDrawing),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         HeaderBlock(title = "Подготовка к итоговым")
 
         Column(
@@ -86,10 +84,8 @@ fun ExamPrepInputScreen(
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp, bottom = 24.dp)
         ) {
-
             SectionTitle("Тип испытания")
             Spacer(modifier = Modifier.height(10.dp))
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -98,27 +94,18 @@ fun ExamPrepInputScreen(
                     .background(SurfaceWhite),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TypeToggleSide(
-                    text = "Итоговые занятия",
-                    selected = state.examType == ExamType.FINAL,
-                    modifier = Modifier.weight(1f)
-                ) { viewModel.setExamType(ExamType.FINAL) }
-                TypeToggleSide(
-                    text = "На звание",
-                    selected = state.examType == ExamType.QUALIFICATION,
-                    modifier = Modifier.weight(1f)
-                ) { viewModel.setExamType(ExamType.QUALIFICATION) }
+                TypeToggleSide("Итоговые занятия", state.examType == ExamType.FINAL, Modifier.weight(1f)) {
+                    viewModel.setExamType(ExamType.FINAL)
+                }
+                TypeToggleSide("На звание", state.examType == ExamType.QUALIFICATION, Modifier.weight(1f)) {
+                    viewModel.setExamType(ExamType.QUALIFICATION)
+                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
-
             SectionTitle("Дата сдачи")
             Spacer(modifier = Modifier.height(10.dp))
-
-            DateField(
-                millis = state.examDateMillis,
-                onClick = { datePickerOpen = true }
-            )
+            DateField(state.examDateMillis) { datePickerOpen = true }
 
             state.daysLeft?.let { days ->
                 Spacer(modifier = Modifier.height(8.dp))
@@ -134,23 +121,18 @@ fun ExamPrepInputScreen(
             if (state.examType == ExamType.QUALIFICATION) {
                 SectionTitle("Целевое звание")
                 Spacer(modifier = Modifier.height(10.dp))
-
-                QualificationPicker(
-                    selected = state.qualificationName,
-                    onSelect = { viewModel.setQualificationName(it) }
-                )
-
+                QualificationPicker(state.qualificationName) { viewModel.setQualificationName(it) }
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
             SectionTitle("Твои упражнения (максимум ${state.maxExercises})")
             Spacer(modifier = Modifier.height(10.dp))
 
-            state.selectedExercises.forEach { exercise ->
+            state.selectedExercises.forEach { ex ->
                 SelectedExerciseCard(
-                    exercise = exercise,
-                    onRemove = { viewModel.removeExercise(exercise.orderNumber) },
-                    onResultChange = { viewModel.updateResult(exercise.orderNumber, it) }
+                    exercise = ex,
+                    onRemove = { viewModel.removeExercise(ex.orderNumber) },
+                    onResultChange = { viewModel.updateResult(ex.orderNumber, it) }
                 )
                 Spacer(modifier = Modifier.height(10.dp))
             }
@@ -163,11 +145,19 @@ fun ExamPrepInputScreen(
 
             Button(
                 onClick = {
+                    // ─── СОХРАНЯЕМ ДАННЫЕ ───
+                    prefs.setExamType(state.examType.name)
+                    state.examDateMillis?.let { prefs.setExamDate(it) }
+                    prefs.setQualificationName(state.qualificationName)
+
+                    val serialized = state.selectedExercises.joinToString("||") {
+                        "${it.orderNumber}|${it.name}|${it.category}|${it.unit}|${it.currentResult}"
+                    }
+                    prefs.setSelectedExercises(serialized)
+
                     navController.navigate("exam_prep_result")
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
+                modifier = Modifier.fillMaxWidth().height(56.dp),
                 shape = RoundedCornerShape(14.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = OvdDarkBlue,
@@ -187,7 +177,6 @@ fun ExamPrepInputScreen(
         }
     }
 
-    // ─── Диалог выбора упражнения ───
     if (pickerOpen) {
         ExercisePickerDialog(
             exercises = allExercises,
@@ -206,7 +195,6 @@ fun ExamPrepInputScreen(
         )
     }
 
-    // ─── Диалог календаря ───
     if (datePickerOpen) {
         DatePickerDialogWrapper(
             initialMillis = state.examDateMillis,
@@ -239,7 +227,6 @@ private fun TypeToggleSide(
 ) {
     val bg = if (selected) OvdDarkBlue else Color.Transparent
     val fg = if (selected) TriWhite else TextSecondary
-
     Box(
         modifier = modifier
             .fillMaxHeight()
@@ -249,31 +236,19 @@ private fun TypeToggleSide(
             .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
-        Text(
-            text = text,
-            color = fg,
-            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
-            fontSize = 14.sp
-        )
+        Text(text = text, color = fg, fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal, fontSize = 14.sp)
     }
 }
 
 @Composable
-private fun DateField(
-    millis: Long?,
-    onClick: () -> Unit
-) {
+private fun DateField(millis: Long?, onClick: () -> Unit) {
     val dateText = if (millis != null) {
-        val sdf = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-        sdf.format(Date(millis))
-    } else {
-        "Выбрать дату"
-    }
+        SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date(millis))
+    } else "Выбрать дату"
 
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
+            .fillMaxWidth().height(56.dp)
             .clip(RoundedCornerShape(14.dp))
             .background(SurfaceWhite)
             .clickable(onClick = onClick)
@@ -286,25 +261,18 @@ private fun DateField(
             fontSize = 16.sp,
             modifier = Modifier.weight(1f)
         )
-        Text(
-            text = "📅",
-            fontSize = 20.sp
-        )
+        Text(text = "📅", fontSize = 20.sp)
     }
 }
 
 @Composable
-private fun QualificationPicker(
-    selected: String?,
-    onSelect: (String) -> Unit
-) {
+private fun QualificationPicker(selected: String?, onSelect: (String) -> Unit) {
     val qualifications = listOf(
         "Специалист третьего класса",
         "Специалист второго класса",
         "Специалист первого класса",
         "Мастер"
     )
-
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         qualifications.forEach { q ->
             val isSelected = selected == q
@@ -319,27 +287,14 @@ private fun QualificationPicker(
             ) {
                 Box(
                     modifier = Modifier
-                        .size(20.dp)
-                        .clip(CircleShape)
+                        .size(20.dp).clip(CircleShape)
                         .background(if (isSelected) OvdDarkBlue else TextSecondary.copy(alpha = 0.3f)),
                     contentAlignment = Alignment.Center
                 ) {
-                    if (isSelected) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .clip(CircleShape)
-                                .background(TriWhite)
-                        )
-                    }
+                    if (isSelected) Box(Modifier.size(8.dp).clip(CircleShape).background(TriWhite))
                 }
                 Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = q,
-                    color = OvdDarkBlue,
-                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                    fontSize = 15.sp
-                )
+                Text(text = q, color = OvdDarkBlue, fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal, fontSize = 15.sp)
             }
         }
     }
@@ -360,34 +315,16 @@ private fun SelectedExerciseCard(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = exercise.name,
-                    color = OvdDarkBlue,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 15.sp,
-                    lineHeight = 20.sp
-                )
+                Text(text = exercise.name, color = OvdDarkBlue, fontWeight = FontWeight.Bold, fontSize = 15.sp, lineHeight = 20.sp)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = "${exercise.category} · ${exercise.unit}",
-                    color = TextSecondary,
-                    fontSize = 12.sp
-                )
+                Text(text = "${exercise.category} · ${exercise.unit}", color = TextSecondary, fontSize = 12.sp)
             }
             Text(
-                text = "✕",
-                color = TextSecondary,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .clip(CircleShape)
-                    .clickable(onClick = onRemove)
-                    .padding(8.dp)
+                text = "✕", color = TextSecondary, fontSize = 18.sp, fontWeight = FontWeight.Bold,
+                modifier = Modifier.clip(CircleShape).clickable(onClick = onRemove).padding(8.dp)
             )
         }
-
         Spacer(modifier = Modifier.height(10.dp))
-
         OutlinedTextField(
             value = exercise.currentResult,
             onValueChange = onResultChange,
@@ -403,19 +340,13 @@ private fun SelectedExerciseCard(
 private fun AddExerciseButton(onClick: () -> Unit) {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
+            .fillMaxWidth().height(56.dp)
             .clip(RoundedCornerShape(14.dp))
             .background(SurfaceWhite)
             .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
-        Text(
-            text = "＋  Добавить упражнение",
-            color = OvdDarkBlue,
-            fontWeight = FontWeight.Bold,
-            fontSize = 15.sp
-        )
+        Text(text = "＋  Добавить упражнение", color = OvdDarkBlue, fontWeight = FontWeight.Bold, fontSize = 15.sp)
     }
 }
