@@ -24,23 +24,42 @@ class ExamPrepResultViewModel(application: Application) : AndroidViewModel(appli
     private val _uiState = MutableStateFlow(ExamPrepResultUiState())
     val uiState: StateFlow<ExamPrepResultUiState> = _uiState
 
-    /**
-     * Генерирует программу на основе данных из предыдущего экрана.
-     * Данные передаются через общий ViewModel — пока упрощённо, через prefs + selected exercises
-     * нужно передавать через навигацию (следующий шаг).
-     */
-    fun generate(
-        age: Int,
-        level: String,
-        daysLeft: Int,
-        targetPoints: Int,
-        exercises: List<SelectedExercise>
-    ) {
+    fun generate() {
         _uiState.value = ExamPrepResultUiState(isLoading = true)
 
         viewModelScope.launch {
             try {
-                // Загружаем баллы по каждому упражнению
+                // ─── Читаем данные из prefs ───
+                val age = prefs.getAge()
+                val level = prefs.getLevel()
+                val examDate = prefs.getExamDate()
+
+                val daysLeft = if (examDate > 0) {
+                    ((examDate - System.currentTimeMillis()) / (1000 * 60 * 60 * 24)).toInt()
+                } else 0
+
+                // ─── Парсим упражнения ───
+                val serialized = prefs.getSelectedExercises()
+                val exercises = parseExercises(serialized)
+
+                if (exercises.isEmpty() || daysLeft <= 0) {
+                    _uiState.value = ExamPrepResultUiState(
+                        isLoading = false,
+                        error = "Недостаточно данных для построения программы"
+                    )
+                    return@launch
+                }
+
+                // ─── Целевые баллы ───
+                val targetPoints = calculateTargetPoints(
+                    gender = prefs.getGender(),
+                    level = level,
+                    age = age,
+                    examType = prefs.getExamType(),
+                    qualificationName = prefs.getQualificationName()
+                )
+
+                // ─── Загружаем баллы упражнений ───
                 val scoresMap = mutableMapOf<Int, List<ExerciseScore>>()
                 for (ex in exercises) {
                     val scores = repo.getExerciseScores(prefs.getGender(), ex.orderNumber)
@@ -50,6 +69,7 @@ class ExamPrepResultViewModel(application: Application) : AndroidViewModel(appli
                     scoresMap[ex.orderNumber] = filtered
                 }
 
+                // ─── Генерируем программу ───
                 val result = ExamPrepEngine.generate(
                     age = age,
                     level = level,
@@ -59,10 +79,8 @@ class ExamPrepResultViewModel(application: Application) : AndroidViewModel(appli
                     scoreLists = scoresMap
                 )
 
-                _uiState.value = ExamPrepResultUiState(
-                    isLoading = false,
-                    result = result
-                )
+                _uiState.value = ExamPrepResultUiState(isLoading = false, result = result)
+
             } catch (e: Exception) {
                 _uiState.value = ExamPrepResultUiState(
                     isLoading = false,
@@ -70,5 +88,55 @@ class ExamPrepResultViewModel(application: Application) : AndroidViewModel(appli
                 )
             }
         }
+    }
+
+    /**
+     * Парсит строку упражнений из prefs.
+     * Формат: "orderNumber|name|category|unit|currentResult||orderNumber|..."
+     */
+    private fun parseExercises(raw: String): List<SelectedExercise> {
+        if (raw.isBlank()) return emptyList()
+        return raw.split("||").mapNotNull { part ->
+            val fields = part.split("|")
+            if (fields.size < 5) return@mapNotNull null
+            SelectedExercise(
+                orderNumber = fields[0].toIntOrNull() ?: return@mapNotNull null,
+                name = fields[1],
+                category = fields[2],
+                unit = fields[3],
+                currentResult = fields[4]
+            )
+        }
+    }
+
+    /**
+     * Считает целевой балл.
+     * Для итоговых — минимум для сдачи по группе.
+     * Для звания — минимум по выбранному званию.
+     */
+    private suspend fun calculateTargetPoints(
+        gender: String,
+        level: String,
+        age: Int,
+        examType: String,
+        qualificationName: String?
+    ): Int {
+        val levelKey = when (level) {
+            "base" -> "base"
+            "enhanced" -> "enhanced"
+            else -> "special"
+        }
+
+        val ageGroup = repo.getAgeGroup(gender, age) ?: return 50
+
+        if (examType == "QUALIFICATION" && qualificationName != null) {
+            val quals = repo.getQualifications(gender, ageGroup.groupNumber, levelKey)
+            val q = quals.find { it.qualificationName == qualificationName }
+            return q?.minPoints ?: 50
+        }
+
+        // Итоговые занятия — минимум
+        val pass = repo.getPassingScore(gender, ageGroup.groupNumber, levelKey)
+        return pass?.minPoints ?: 50
     }
 }
