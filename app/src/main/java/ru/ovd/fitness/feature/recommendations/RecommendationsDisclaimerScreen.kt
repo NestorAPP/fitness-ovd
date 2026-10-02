@@ -102,21 +102,6 @@ fun RecommendationsDisclaimerScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(12.dp))
 
             DisclaimerParagraph(
-                "Авторы приложения не являются профессиональными тренерами, " +
-                        "физиологами, спортивными врачами или медицинскими работниками."
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            DisclaimerParagraph(
-                "Раздел «Рекомендации» носит исключительно информационный характер. " +
-                        "Упражнения и программы тренировок представлены в справочных целях " +
-                        "и не являются медицинскими или тренерскими предписаниями."
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            DisclaimerParagraph(
                 "Перед началом любой программы тренировок рекомендуется:"
             )
 
