@@ -59,6 +59,7 @@ fun ExamPrepInputScreen(
 
     var allExercises by remember { mutableStateOf<List<Exercise>>(emptyList()) }
     var pickerOpen by remember { mutableStateOf(false) }
+    var datePickerOpen by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         try {
@@ -116,7 +117,7 @@ fun ExamPrepInputScreen(
 
             DateField(
                 millis = state.examDateMillis,
-                onClick = { /* TODO: календарь */ }
+                onClick = { datePickerOpen = true }
             )
 
             state.daysLeft?.let { days ->
@@ -186,6 +187,7 @@ fun ExamPrepInputScreen(
         }
     }
 
+    // ─── Диалог выбора упражнения ───
     if (pickerOpen) {
         ExercisePickerDialog(
             exercises = allExercises,
@@ -200,6 +202,18 @@ fun ExamPrepInputScreen(
                         unit = ex.unit
                     )
                 )
+            }
+        )
+    }
+
+    // ─── Диалог календаря ───
+    if (datePickerOpen) {
+        DatePickerDialogWrapper(
+            initialMillis = state.examDateMillis,
+            onDismiss = { datePickerOpen = false },
+            onConfirm = { millis ->
+                viewModel.setExamDate(millis)
+                datePickerOpen = false
             }
         )
     }
