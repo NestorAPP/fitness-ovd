@@ -163,7 +163,7 @@ fun RecommendationsDisclaimerScreen(navController: NavHostController) {
         Button(
             onClick = {
                 prefs.setRecommendationsDisclaimerAccepted(true)
-                navController.navigate("recommendations_input") {
+                navController.navigate("recommendations_start") {
                     popUpTo("recommendations_disclaimer") { inclusive = true }
                 }
             },
