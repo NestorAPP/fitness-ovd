@@ -1,27 +1,20 @@
 package ru.ovd.fitness.feature.splash
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.TriBlue
@@ -31,50 +24,30 @@ import ru.ovd.fitness.core.ui.theme.TriWhite
 @Composable
 fun SplashScreen(onFinished: () -> Unit) {
 
-    // ─── Появление флага ───
-    val flagAlpha = remember { Animatable(0f) }
-    val flagScale = remember { Animatable(0.7f) }
+    val whiteOffset = remember { Animatable(-400f) }
+    val blueOffset = remember { Animatable(-400f) }
+    val redOffset = remember { Animatable(400f) }
 
-    // ─── Появление текстов ───
     val titleAlpha = remember { Animatable(0f) }
     val subtitleAlpha = remember { Animatable(0f) }
 
-    // ─── Развевание (бесконечная анимация смещения) ───
-    val infiniteTransition = rememberInfiniteTransition(label = "wave")
-    val waveX by infiniteTransition.animateFloat(
-        initialValue = -3f,
-        targetValue = 3f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1200, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "waveX"
-    )
-    val waveY by infiniteTransition.animateFloat(
-        initialValue = -2f,
-        targetValue = 2f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(900, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "waveY"
-    )
-
     LaunchedEffect(Unit) {
-        // Флаг появляется
-        flagAlpha.animateTo(1f, tween(600))
-        flagScale.animateTo(1f, tween(600))
+        // Полосы выезжают
+        whiteOffset.animateTo(0f, tween(400))
+        blueOffset.animateTo(0f, tween(400))
+        redOffset.animateTo(0f, tween(400))
 
         // Название
-        delay(200)
         titleAlpha.animateTo(1f, tween(500))
 
-        // Расшифровка
+        // Небольшая пауза между названием и расшифровкой
         delay(200)
+
+        // Расшифровка
         subtitleAlpha.animateTo(1f, tween(400))
 
-        // Пауза — покажем красоту
-        delay(900)
+        // ─── Пауза, чтобы прочитать ───
+        delay(1800)
         onFinished()
     }
 
@@ -89,41 +62,36 @@ fun SplashScreen(onFinished: () -> Unit) {
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
-            // ─── ФЛАГ (развевается) ───
-            Box(
+            // ─── ФЛАГ ───
+            Column(
                 modifier = Modifier
-                    .scale(flagScale.value)
-                    .alpha(flagAlpha.value)
-                    .offset(x = waveX.dp, y = waveY.dp)
+                    .width(220.dp)
+                    .height(132.dp)
             ) {
-                Column(
+                Box(
                     modifier = Modifier
-                        .width(220.dp)
-                        .height(132.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp)
-                            .background(TriWhite)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp)
-                            .background(TriBlue)
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(44.dp)
-                            .background(TriRed)
-                    )
-                }
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .offset(x = whiteOffset.value.dp)
+                        .background(TriWhite)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .offset(y = blueOffset.value.dp / 3)
+                        .background(TriBlue)
+                )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(44.dp)
+                        .offset(x = redOffset.value.dp)
+                        .background(TriRed)
+                )
             }
 
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(36.dp))
 
             // ─── Название ───
             Text(
