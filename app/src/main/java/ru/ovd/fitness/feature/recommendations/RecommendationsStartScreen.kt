@@ -11,20 +11,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import ru.ovd.fitness.core.data.UserPreferences
+import androidx.compose.ui.platform.LocalContext
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.OvdLightBlue
-import ru.ovd.fitness.core.ui.theme.SurfaceWhite
-import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.feature.fitness.HeaderBlock
 
 @Composable
 fun RecommendationsStartScreen(navController: NavHostController) {
+
+    val context = LocalContext.current
+    val prefs = UserPreferences(context)
 
     Column(
         modifier = Modifier
@@ -50,21 +52,27 @@ fun RecommendationsStartScreen(navController: NavHostController) {
             MenuCard(
                 title = "Поддержание физической формы",
                 subtitle = "Программа для общего тонуса",
-                emoji = "💪",
-                onClick = {
-                    navController.navigate("recommendations_maintenance")
+                emoji = "💪"
+            ) {
+                if (prefs.isRecommendationsDisclaimerAccepted()) {
+                    navController.navigate("recommendations_input")
+                } else {
+                    navController.navigate("recommendations_disclaimer")
                 }
-            )
+            }
 
             // ─── Кнопка 2: Подготовка к итоговым ───
             MenuCard(
                 title = "Подготовка к итоговым занятиям",
                 subtitle = "Программа для сдачи нормативов",
-                emoji = "🎯",
-                onClick = {
+                emoji = "🎯"
+            ) {
+                if (prefs.isRecommendationsDisclaimerAccepted()) {
                     navController.navigate("exam_prep_input")
+                } else {
+                    navController.navigate("recommendations_disclaimer")
                 }
-            )
+            }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
