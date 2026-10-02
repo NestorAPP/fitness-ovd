@@ -7,15 +7,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import ru.ovd.fitness.core.data.UserPreferences
-import androidx.compose.ui.platform.LocalContext
 import ru.ovd.fitness.core.ui.theme.BackgroundSoft
 import ru.ovd.fitness.core.ui.theme.OvdDarkBlue
 import ru.ovd.fitness.core.ui.theme.OvdLightBlue
@@ -27,6 +28,15 @@ fun RecommendationsStartScreen(navController: NavHostController) {
 
     val context = LocalContext.current
     val prefs = UserPreferences(context)
+
+    // ─── Проверка дисклеймера при входе ───
+    LaunchedEffect(Unit) {
+        if (!prefs.isRecommendationsDisclaimerAccepted()) {
+            navController.navigate("recommendations_disclaimer") {
+                popUpTo("recommendations_start") { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -54,11 +64,7 @@ fun RecommendationsStartScreen(navController: NavHostController) {
                 subtitle = "Программа для общего тонуса",
                 emoji = "💪"
             ) {
-                if (prefs.isRecommendationsDisclaimerAccepted()) {
-                    navController.navigate("recommendations_input")
-                } else {
-                    navController.navigate("recommendations_disclaimer")
-                }
+                navController.navigate("recommendations_input")
             }
 
             // ─── Кнопка 2: Подготовка к итоговым ───
@@ -67,11 +73,7 @@ fun RecommendationsStartScreen(navController: NavHostController) {
                 subtitle = "Программа для сдачи нормативов",
                 emoji = "🎯"
             ) {
-                if (prefs.isRecommendationsDisclaimerAccepted()) {
-                    navController.navigate("exam_prep_input")
-                } else {
-                    navController.navigate("recommendations_disclaimer")
-                }
+                navController.navigate("exam_prep_input")
             }
         }
 
