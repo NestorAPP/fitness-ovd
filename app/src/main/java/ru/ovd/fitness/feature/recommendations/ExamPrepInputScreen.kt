@@ -23,10 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,9 +42,7 @@ import ru.ovd.fitness.core.ui.theme.TextPrimary
 import ru.ovd.fitness.core.ui.theme.TextSecondary
 import ru.ovd.fitness.core.ui.theme.TriWhite
 import ru.ovd.fitness.feature.fitness.HeaderBlock
-import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -58,22 +56,15 @@ fun ExamPrepInputScreen(
     val context = LocalContext.current
     val prefs = UserPreferences(context)
     val repository = remember { FitnessRepository(context) }
-    val scope = rememberCoroutineScope()
 
-    // Все доступные упражнения для пола сотрудника
     var allExercises by remember { mutableStateOf<List<Exercise>>(emptyList()) }
-
-    // Открыт ли диалог выбора упражнения
     var pickerOpen by remember { mutableStateOf(false) }
 
-    // Загружаем упражнения при старте
     LaunchedEffect(Unit) {
-        scope.launch {
-            try {
-                allExercises = repository.getExercises(prefs.getGender())
-            } catch (_: Exception) {
-                allExercises = emptyList()
-            }
+        try {
+            allExercises = repository.getExercises(prefs.getGender())
+        } catch (_: Exception) {
+            allExercises = emptyList()
         }
     }
 
@@ -86,7 +77,6 @@ fun ExamPrepInputScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ─── ШАПКА ───
         HeaderBlock(title = "Подготовка к итоговым")
 
         Column(
@@ -96,7 +86,6 @@ fun ExamPrepInputScreen(
                 .padding(top = 20.dp, bottom = 24.dp)
         ) {
 
-            // ─── Тип испытания ───
             SectionTitle("Тип испытания")
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -122,7 +111,6 @@ fun ExamPrepInputScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ─── Дата ───
             SectionTitle("Дата сдачи")
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -131,7 +119,6 @@ fun ExamPrepInputScreen(
                 onClick = { /* TODO: календарь */ }
             )
 
-            // Показываем, сколько дней осталось
             state.daysLeft?.let { days ->
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
@@ -143,7 +130,6 @@ fun ExamPrepInputScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ─── Звание (если выбрано) ───
             if (state.examType == ExamType.QUALIFICATION) {
                 SectionTitle("Целевое звание")
                 Spacer(modifier = Modifier.height(10.dp))
@@ -156,7 +142,6 @@ fun ExamPrepInputScreen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            // ─── Упражнения ───
             SectionTitle("Твои упражнения (максимум ${state.maxExercises})")
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -175,7 +160,6 @@ fun ExamPrepInputScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // ─── Кнопка «Показать программу» ───
             Button(
                 onClick = {
                     navController.navigate("exam_prep_result")
@@ -202,7 +186,6 @@ fun ExamPrepInputScreen(
         }
     }
 
-    // ─── Диалог выбора упражнения ───
     if (pickerOpen) {
         ExercisePickerDialog(
             exercises = allExercises,
@@ -222,10 +205,6 @@ fun ExamPrepInputScreen(
     }
 }
 
-// ═══════════════════════════════════════════════════════
-//   КОМПОНЕНТЫ
-// ═══════════════════════════════════════════════════════
-
 @Composable
 private fun SectionTitle(text: String) {
     Text(
@@ -244,7 +223,7 @@ private fun TypeToggleSide(
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val bg = if (selected) OvdDarkBlue else androidx.compose.ui.graphics.Color.Transparent
+    val bg = if (selected) OvdDarkBlue else Color.Transparent
     val fg = if (selected) TriWhite else TextSecondary
 
     Box(
@@ -365,7 +344,6 @@ private fun SelectedExerciseCard(
             .background(OvdLightBlue)
             .padding(16.dp)
     ) {
-        // ─── Название + кнопка удаления ───
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
@@ -396,7 +374,6 @@ private fun SelectedExerciseCard(
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        // ─── Текущий результат ───
         OutlinedTextField(
             value = exercise.currentResult,
             onValueChange = onResultChange,
