@@ -14,20 +14,30 @@ fun RecommendationsNavHost(
         navController = navController,
         startDestination = "recommendations_start"
     ) {
+        // ─── Стартовый экран с двумя кнопками ───
         composable("recommendations_start") {
             RecommendationsStartScreen(navController = navController)
         }
 
+        // ─── Дисклеймер (для обоих подразделов) ───
         composable("recommendations_disclaimer") {
             RecommendationsDisclaimerScreen(navController = navController)
         }
 
+        // ─── Подраздел 1: Поддержание физической формы ───
         composable("recommendations_input") {
             RecommendationsInputScreen(navController = navController)
         }
-
-        composable("recommendations_result") {
+        composable("recommendations_maintenance") {
             RecommendationsScreen(navController = navController)
+        }
+
+        // ─── Подраздел 2: Подготовка к итоговым занятиям ───
+        composable("exam_prep_input") {
+            ExamPrepInputScreen(navController = navController)
+        }
+        composable("exam_prep_result") {
+            ExamPrepResultScreen(navController = navController)
         }
     }
 }
