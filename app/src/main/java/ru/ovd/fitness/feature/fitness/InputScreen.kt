@@ -9,11 +9,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,7 +38,6 @@ import ru.ovd.fitness.core.ui.theme.TriWhite
 @Composable
 fun InputScreen(
     navController: NavHostController,
-    onSettingsClick: () -> Unit = {},
     viewModel: InputViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -55,11 +51,7 @@ fun InputScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        HeaderBlock(
-            title = "Физическая подготовка",
-            showSettings = true,
-            onSettingsClick = onSettingsClick
-        )
+        HeaderBlock(title = "Физическая подготовка")
 
         Column(
             modifier = Modifier
@@ -166,11 +158,10 @@ fun HeaderBlock(
                         .clickable(onClick = onSettingsClick),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Settings,
-                        contentDescription = "Настройки",
-                        tint = OvdDarkBlue,
-                        modifier = Modifier.size(22.dp)
+                    Text(
+                        text = "⚙",
+                        fontSize = 22.sp,
+                        color = OvdDarkBlue
                     )
                 }
             }
@@ -212,7 +203,7 @@ fun HeaderBlock(
 }
 
 // ═══════════════════════════════════════════════════════
-//   ОСТАЛЬНЫЕ КОМПОНЕНТЫ (без изменений)
+//   ОСТАЛЬНЫЕ КОМПОНЕНТЫ
 // ═══════════════════════════════════════════════════════
 
 @Composable
