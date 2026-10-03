@@ -127,12 +127,12 @@ fun HomeScreen() {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            composable("tab_fitness") {
-                FitnessNavHost(
+            composable("tab_fitness")         { FitnessNavHost() }
+            composable("tab_reference")       {
+                ReferenceNavHost(
                     onSettingsClick = { navController.navigate("settings_main") }
                 )
             }
-            composable("tab_reference")       { ReferenceNavHost() }
             composable("tab_recommendations") { RecommendationsNavHost() }
             composable("tab_combat")          { CombatScreen() }
             composable("settings_main")       { SettingsNavHost() }
