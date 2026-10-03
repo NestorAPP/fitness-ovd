@@ -9,8 +9,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,8 +54,11 @@ fun InputScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        // ─── ШАПКА ───
-        HeaderBlock(title = "Физическая подготовка")
+        HeaderBlock(
+            title = "Физическая подготовка",
+            showSettings = true,
+            onSettingsClick = { navController.navigate("settings_main") }
+        )
 
         Column(
             modifier = Modifier
@@ -133,13 +139,17 @@ fun InputScreen(
 // ═══════════════════════════════════════════════════════
 
 @Composable
-fun HeaderBlock(title: String) {
+fun HeaderBlock(
+    title: String,
+    showSettings: Boolean = false,
+    onSettingsClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
+        // ─── Центр: карточка с заголовком и триколором ───
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -169,6 +179,27 @@ fun HeaderBlock(title: String) {
                     Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
                     Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
                 }
+            }
+        }
+
+        // ─── Справа: шестерёнка (если включена) ───
+        if (showSettings) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.CenterEnd)
+                    .padding(end = 16.dp)
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(SurfaceWhite)
+                    .clickable(onClick = onSettingsClick),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Settings,
+                    contentDescription = "Настройки",
+                    tint = OvdDarkBlue,
+                    modifier = Modifier.size(24.dp)
+                )
             }
         }
     }
