@@ -33,6 +33,7 @@ import ru.ovd.fitness.feature.fitness.HeaderBlock
 @Composable
 fun ReferenceListScreen(
     navController: NavHostController,
+    onSettingsClick: () -> Unit = {},
     viewModel: ReferenceListViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -48,8 +49,12 @@ fun ReferenceListScreen(
             .windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
 
-        // ─── ШАПКА ───
-        HeaderBlock(title = "Справочник")
+        // ─── ШАПКА с шестерёнкой ───
+        HeaderBlock(
+            title = "Справочник",
+            showSettings = true,
+            onSettingsClick = onSettingsClick
+        )
 
         // ─── Содержимое ───
         if (state.isLoading) {
