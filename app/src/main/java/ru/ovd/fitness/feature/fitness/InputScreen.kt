@@ -144,12 +144,40 @@ fun HeaderBlock(
     showSettings: Boolean = false,
     onSettingsClick: () -> Unit = {}
 ) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        // ─── Центр: карточка с заголовком и триколором ───
+
+        // ─── Верхний ряд: шестерёнка справа ───
+        if (showSettings) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 4.dp),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(CircleShape)
+                        .background(SurfaceWhite)
+                        .clickable(onClick = onSettingsClick),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = "Настройки",
+                        tint = OvdDarkBlue,
+                        modifier = Modifier.size(22.dp)
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+
+        // ─── Карточка с заголовком и триколором ───
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -179,27 +207,6 @@ fun HeaderBlock(
                     Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriBlue))
                     Box(modifier = Modifier.weight(1f).fillMaxHeight().background(TriRed))
                 }
-            }
-        }
-
-        // ─── Справа: шестерёнка (если включена) ───
-        if (showSettings) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 16.dp)
-                    .size(44.dp)
-                    .clip(CircleShape)
-                    .background(SurfaceWhite)
-                    .clickable(onClick = onSettingsClick),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Settings,
-                    contentDescription = "Настройки",
-                    tint = OvdDarkBlue,
-                    modifier = Modifier.size(24.dp)
-                )
             }
         }
     }
