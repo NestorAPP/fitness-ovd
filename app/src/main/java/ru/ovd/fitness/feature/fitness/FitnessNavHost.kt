@@ -10,18 +10,14 @@ import androidx.navigation.navArgument
 
 @Composable
 fun FitnessNavHost(
-    navController: NavHostController = rememberNavController(),
-    onSettingsClick: () -> Unit = {}
+    navController: NavHostController = rememberNavController()
 ) {
     NavHost(
         navController = navController,
         startDestination = "fitness_input"
     ) {
         composable("fitness_input") {
-            InputScreen(
-                navController = navController,
-                onSettingsClick = onSettingsClick
-            )
+            InputScreen(navController = navController)
         }
         composable(
             route = "fitness_result?gender={gender}&age={age}&level={level}",
