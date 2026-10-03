@@ -95,7 +95,7 @@ fun RecommendationsDisclaimerScreen(navController: NavHostController) {
                 .padding(20.dp)
         ) {
             DisclaimerParagraph(
-                "Приложение «Физо ОВД» является справочным инструментом " +
+                "Приложение «ВИС БРИЗ» является справочным инструментом " +
                         "и не заменяет профессиональную консультацию."
             )
 
