@@ -140,7 +140,7 @@ fun RecommendationsInputScreen(
 
             Button(
                 onClick = {
-                    navController.navigate("recommendations_result")
+                    navController.navigate("recommendations_maintenance")
                 },
                 modifier = Modifier
                     .fillMaxWidth()
