@@ -41,6 +41,7 @@ import ru.ovd.fitness.core.ui.theme.TriWhite
 @Composable
 fun InputScreen(
     navController: NavHostController,
+    onSettingsClick: () -> Unit = {},
     viewModel: InputViewModel = viewModel()
 ) {
     val state by viewModel.uiState.collectAsState()
@@ -57,7 +58,7 @@ fun InputScreen(
         HeaderBlock(
             title = "Физическая подготовка",
             showSettings = true,
-            onSettingsClick = { navController.navigate("settings_main") }
+            onSettingsClick = onSettingsClick
         )
 
         Column(
@@ -150,7 +151,6 @@ fun HeaderBlock(
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
 
-        // ─── Верхний ряд: шестерёнка справа ───
         if (showSettings) {
             Row(
                 modifier = Modifier
@@ -177,7 +177,6 @@ fun HeaderBlock(
             Spacer(modifier = Modifier.height(8.dp))
         }
 
-        // ─── Карточка с заголовком и триколором ───
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -213,7 +212,7 @@ fun HeaderBlock(
 }
 
 // ═══════════════════════════════════════════════════════
-//   ОСТАЛЬНЫЕ КОМПОНЕНТЫ
+//   ОСТАЛЬНЫЕ КОМПОНЕНТЫ (без изменений)
 // ═══════════════════════════════════════════════════════
 
 @Composable
