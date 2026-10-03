@@ -10,14 +10,18 @@ import androidx.navigation.navArgument
 
 @Composable
 fun ReferenceNavHost(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    onSettingsClick: () -> Unit = {}
 ) {
     NavHost(
         navController = navController,
         startDestination = "reference_list"
     ) {
         composable("reference_list") {
-            ReferenceListScreen(navController = navController)
+            ReferenceListScreen(
+                navController = navController,
+                onSettingsClick = onSettingsClick
+            )
         }
 
         composable(
