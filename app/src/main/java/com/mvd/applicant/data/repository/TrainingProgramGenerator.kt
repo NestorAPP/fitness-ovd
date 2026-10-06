@@ -1,24 +1,17 @@
 package com.mvd.applicant.data.repository
 
-import com.mvd.applicant.data.model.*
+import com.mvd.applicant.data.model.Exercise
+import com.mvd.applicant.data.model.Gender
+import com.mvd.applicant.data.model.PurposeGroup
+import com.mvd.applicant.data.model.TrainingDay
+import com.mvd.applicant.data.model.TrainingInput
+import com.mvd.applicant.data.model.TrainingPriority
+import com.mvd.applicant.data.model.TrainingProgram
+import com.mvd.applicant.data.model.TrainingWeek
 import com.mvd.applicant.data.tables.ScoreTables
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-/**
- * Генератор персональной программы тренировок.
- *
- * Логика:
- *  1. Считаем текущие баллы за три норматива.
- *  2. Считаем разрывы до максимума (33 / 33 / 34).
- *  3. Веса нормативов — пропорционально разрывам.
- *  4. Определяем фазы в зависимости от количества недель до экзамена:
- *     - > 12 недель: Базовая (4) + Развивающая (4–6) + Пиковая (2–3)
- *     - 4–12 недель: Базовая (2–3) + Развивающая (2–4) + Пиковая (1–2)
- *     - < 4 недель: только интенсивный курс с предупреждением
- *  5. Составляем недели: 3 тренировки в неделю.
- *  6. Распределяем упражнения пропорционально весам нормативов.
- */
 class TrainingProgramGenerator {
 
     companion object {
@@ -49,10 +42,6 @@ class TrainingProgramGenerator {
             lastUpdatedAt = LocalDate.now()
         )
     }
-
-    // ============================================================
-    // РАСЧЁТ ПРИОРИТЕТОВ
-    // ============================================================
 
     private fun calculatePriority(input: TrainingInput): TrainingPriority {
         val strengthPoints = when (input.gender) {
@@ -85,10 +74,6 @@ class TrainingProgramGenerator {
         )
     }
 
-    // ============================================================
-    // ПОЛНАЯ ПРОГРАММА (> 12 недель)
-    // ============================================================
-
     private fun generateFullProgram(
         input: TrainingInput,
         priority: TrainingPriority,
@@ -102,25 +87,18 @@ class TrainingProgramGenerator {
 
         var weekNum = 1
 
-        // Базовая фаза
         repeat(baseWeeks) {
             weeks.add(buildWeek(weekNum++, "Базовая", input, priority, baseIntensity = true))
         }
-        // Развивающая фаза
         repeat(developWeeks) {
             weeks.add(buildWeek(weekNum++, "Развивающая", input, priority, baseIntensity = false))
         }
-        // Пиковая фаза
         repeat(peakWeeks) {
             weeks.add(buildWeek(weekNum++, "Пиковая", input, priority, baseIntensity = false))
         }
 
         return weeks
     }
-
-    // ============================================================
-    // КОРОТКАЯ ПРОГРАММА (4–12 недель)
-    // ============================================================
 
     private fun generateShortProgram(
         input: TrainingInput,
@@ -148,10 +126,6 @@ class TrainingProgramGenerator {
         return weeks
     }
 
-    // ============================================================
-    // ИНТЕНСИВНЫЙ КУРС (< 4 недель)
-    // ============================================================
-
     private fun generateIntensiveCourse(
         input: TrainingInput,
         priority: TrainingPriority,
@@ -161,10 +135,6 @@ class TrainingProgramGenerator {
             buildWeek(weekNum, "Интенсивная", input, priority, baseIntensity = false)
         }
     }
-
-    // ============================================================
-    // СБОРКА ОДНОЙ НЕДЕЛИ
-    // ============================================================
 
     private fun buildWeek(
         weekNum: Int,
@@ -192,10 +162,6 @@ class TrainingProgramGenerator {
         )
     }
 
-    // ============================================================
-    // ДЕНЬ 1 — СИЛА + СКОРОСТЬ
-    // ============================================================
-
     private fun buildDayStrengthAndSpeed(
         input: TrainingInput,
         priority: TrainingPriority,
@@ -206,10 +172,7 @@ class TrainingProgramGenerator {
             priority.strengthWeight > 0.25f -> if (baseIntensity) 3 else 4
             else -> if (baseIntensity) 2 else 3
         }
-        val reps = when {
-            baseIntensity -> "6–8"
-            else -> "5–6"
-        }
+        val reps = if (baseIntensity) "6–8" else "5–6"
 
         val isMale = input.gender == Gender.MALE
         val strengthExercise = if (isMale) {
@@ -248,10 +211,6 @@ class TrainingProgramGenerator {
         )
     }
 
-    // ============================================================
-    // ДЕНЬ 2 — ВЫНОСЛИВОСТЬ + СКОРОСТЬ
-    // ============================================================
-
     private fun buildDayEnduranceAndSpeed(
         input: TrainingInput,
         priority: TrainingPriority,
@@ -284,10 +243,6 @@ class TrainingProgramGenerator {
             cooldown = "Заминка 10 мин: медленный бег, растяжка ног."
         )
     }
-
-    // ============================================================
-    // ДЕНЬ 3 — СМЕШАННЫЙ
-    // ============================================================
 
     private fun buildDayMixed(
         input: TrainingInput,
