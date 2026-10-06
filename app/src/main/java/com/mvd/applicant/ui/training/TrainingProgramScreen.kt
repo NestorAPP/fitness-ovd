@@ -46,9 +46,7 @@ fun TrainingProgramScreen(
     ) {
         item { SectionTitle("Ваша программа подготовки") }
 
-        item {
-            PrioritySummaryCard(program)
-        }
+        item { PrioritySummaryCard(program) }
 
         state.warning?.let { warning ->
             item {
