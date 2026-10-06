@@ -12,7 +12,7 @@ fun TrainingScreen(vm: TrainingViewModel = viewModel()) {
     if (state.program == null) {
         TrainingInputScreen(
             vm = vm,
-            onProgramReady = { /* state уже обновился */ }
+            onProgramReady = { }
         )
     } else {
         TrainingProgramScreen(
