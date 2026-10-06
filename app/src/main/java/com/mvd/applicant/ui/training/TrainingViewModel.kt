@@ -75,6 +75,10 @@ class TrainingViewModel(
         _state.value = _state.value.copy(viewMode = mode)
     }
 
+    fun resetProgram() {
+        _state.value = _state.value.copy(program = null, warning = null, error = null)
+    }
+
     fun calculateProgram() {
         val s = _state.value
         val examDate = s.examDate
