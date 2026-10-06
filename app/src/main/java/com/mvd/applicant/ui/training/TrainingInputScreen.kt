@@ -7,7 +7,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +53,7 @@ fun TrainingInputScreen(
     val run1000SecLabels = remember { run1000SecValues.map { "%02d".format(it) } }
     val run1000SecIndex = run1000SecValues.indexOf(state.run1000Seconds).coerceAtLeast(0)
 
-    var showDatePicker by remember { androidx.compose.runtime.mutableStateOf(false) }
+    var showDatePicker by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -68,7 +70,6 @@ fun TrainingInputScreen(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        // Пол
         SubsectionTitle("Пол")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
@@ -83,7 +84,6 @@ fun TrainingInputScreen(
             )
         }
 
-        // Группа
         SubsectionTitle("Группа предназначения")
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             FilterChip(
@@ -98,7 +98,6 @@ fun TrainingInputScreen(
             )
         }
 
-        // Текущие результаты
         DecoratedCard {
             val title = if (state.gender == Gender.MALE)
                 "Текущий результат: Подтягивание (раз)"
@@ -145,7 +144,6 @@ fun TrainingInputScreen(
             }
         }
 
-        // Дата экзамена
         SubsectionTitle("Дата вступительного испытания")
         OutlinedButton(
             onClick = { showDatePicker = true },
@@ -180,7 +178,6 @@ fun TrainingInputScreen(
             }
         }
 
-        // Ошибка
         state.error?.let {
             Card(
                 colors = CardDefaults.cardColors(containerColor = MvdRed.copy(alpha = 0.1f))
@@ -189,7 +186,6 @@ fun TrainingInputScreen(
             }
         }
 
-        // Кнопка
         Button(
             onClick = {
                 vm.calculateProgram()
